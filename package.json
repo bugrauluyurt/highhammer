@@ -1,0 +1,19 @@
+{
+  "name": "highhammer",
+  "version": "0.0.0",
+  "license": "MIT",
+  "scripts": {
+    "start": "nx serve",
+    "build": "nx build",
+    "test": "nx test"
+  },
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "nx": "14.5.8",
+    "@nrwl/cli": "14.5.8",
+    "@nrwl/workspace": "14.5.8",
+    "typescript": "~4.7.2",
+    "prettier": "^2.6.2"
+  }
+}
