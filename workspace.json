@@ -1,5 +1,10 @@
 {
   "$schema": "./node_modules/nx/schemas/workspace-schema.json",
   "version": 2,
-  "projects": {}
+  "projects": {
+    "api-core": "apps/api-core",
+    "api-worker": "apps/api-worker",
+    "client-app": "apps/client-app",
+    "client-app-e2e": "apps/client-app-e2e"
+  }
 }
