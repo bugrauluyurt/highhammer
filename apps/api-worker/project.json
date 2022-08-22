@@ -10,7 +10,8 @@
         "outputPath": "dist/apps/api-worker",
         "main": "apps/api-worker/src/main.ts",
         "tsConfig": "apps/api-worker/tsconfig.app.json",
-        "assets": ["apps/api-worker/src/assets"]
+        "assets": ["apps/api-worker/src/assets"],
+        "generatePackageJson": true
       },
       "configurations": {
         "production": {

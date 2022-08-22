@@ -1,17 +1,16 @@
 {
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/api-core/src",
+  "sourceRoot": "apps/api-worker/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/node:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/api-core",
-        "main": "apps/api-core/src/main.ts",
-        "tsConfig": "apps/api-core/tsconfig.app.json",
-        "assets": ["apps/api-core/src/assets"],
-        "generatePackageJson": true
+        "outputPath": "dist/apps/api-worker",
+        "main": "apps/api-worker/src/main.ts",
+        "tsConfig": "apps/api-worker/tsconfig.app.json",
+        "assets": ["apps/api-worker/src/assets"]
       },
       "configurations": {
         "production": {
@@ -20,8 +19,8 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/api-core/src/environments/environment.ts",
-              "with": "apps/api-core/src/environments/environment.prod.ts"
+              "replace": "apps/api-worker/src/environments/environment.ts",
+              "with": "apps/api-worker/src/environments/environment.prod.ts"
             }
           ]
         }
@@ -30,11 +29,11 @@
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
-        "buildTarget": "api-core:build"
+        "buildTarget": "api-worker:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "api-core:build:production"
+          "buildTarget": "api-worker:build:production"
         }
       }
     },
@@ -42,14 +41,14 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/api-core/**/*.ts"]
+        "lintFilePatterns": ["apps/api-worker/**/*.ts"]
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["coverage/apps/api-core"],
+      "outputs": ["coverage/apps/api-worker"],
       "options": {
-        "jestConfig": "apps/api-core/jest.config.ts",
+        "jestConfig": "apps/api-worker/jest.config.ts",
         "passWithNoTests": true
       }
     }

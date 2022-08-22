@@ -10,8 +10,7 @@
         "outputPath": "dist/apps/api-core",
         "main": "apps/api-core/src/main.ts",
         "tsConfig": "apps/api-core/tsconfig.app.json",
-        "assets": ["apps/api-core/src/assets"],
-        "generatePackageJson": true
+        "assets": ["apps/api-core/src/assets"]
       },
       "configurations": {
         "production": {
