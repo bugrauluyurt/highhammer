@@ -3,6 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "docker:dev:generate-workspace": "node ./tools/dev-scripts/docker-generate-workspace.js",
+    "docker:dev:client-app": "npm run docker:dev:generate-workspace client-app && nx run client-app:serve",
     "start": "nx serve",
     "build": "nx build",
     "test": "nx test"

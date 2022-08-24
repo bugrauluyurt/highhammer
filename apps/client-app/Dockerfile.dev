@@ -1,6 +1,5 @@
 FROM node:16.17.0-alpine
-WORKDIR '/usr/src/app'
-COPY ./package*.json ./
-RUN npm install
+WORKDIR '/usr/src/root'
+# @INFO: node_modules folder is shared in between containers.
 COPY . .
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "docker:dev:client-app"]

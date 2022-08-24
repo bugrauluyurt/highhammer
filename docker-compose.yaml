@@ -1,0 +1,31 @@
+version: "3.9"
+
+x-nx-tools-volume:
+  &nx-tools
+  type: bind
+  source: ./tools
+  target: /usr/src/root/tools
+
+x-nx-libs-volume:
+  &nx-libs
+  type: bind
+  source: ./libs
+  target: /usr/src/root/libs
+
+x-nx-node-modules-volume:
+  &nx-node-modules
+  type: bind
+  source: ./node_modules
+  target: /usr/src/root/node_modules
+
+services:
+  clientapp:
+    build:
+      dockerfile: ./apps/client-app/Dockerfile.dev
+    volumes:
+      - ./apps/client-app/:/usr/src/root/apps/client-app
+      - *nx-tools
+      - *nx-libs
+      - *nx-node-modules
+    ports:
+      - '4200:4200'
