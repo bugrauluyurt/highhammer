@@ -21,8 +21,7 @@
         ],
         "styles": [],
         "scripts": [],
-        "webpackConfig": "@nrwl/react/plugins/webpack",
-        "generatePackageJson": true
+        "webpackConfig": "@nrwl/react/plugins/webpack"
       },
       "configurations": {
         "development": {
