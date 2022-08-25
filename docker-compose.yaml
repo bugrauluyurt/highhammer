@@ -1,5 +1,11 @@
 version: "3"
 
+x-nx-env-volume:
+  &nx-env
+  type: bind
+  source: ./config/env/.env.${NX_APP_ENV:-dev}
+  target: /usr/src/root/.env
+
 x-nx-tools-volume:
   &nx-tools
   type: bind
@@ -23,9 +29,10 @@ services:
     build:
       dockerfile: ./apps/client-app/Dockerfile.dev
     volumes:
-      - ./apps/client-app/:/usr/src/root/apps/client-app
+      - *nx-env
       - *nx-tools
       - *nx-libs
       - *nx-node-modules
+      - ./apps/client-app/:/usr/src/root/apps/client-app
     ports:
       - '4200:4200'
