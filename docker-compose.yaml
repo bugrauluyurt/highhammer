@@ -1,38 +1,13 @@
 version: "3"
 
-x-nx-env-volume:
-  &nx-env
-  type: bind
-  source: ./config/env/.env.${NX_APP_ENV:-dev}
-  target: /usr/src/root/.env
-
-x-nx-tools-volume:
-  &nx-tools
-  type: bind
-  source: ./tools
-  target: /usr/src/root/tools
-
-x-nx-libs-volume:
-  &nx-libs
-  type: bind
-  source: ./libs
-  target: /usr/src/root/libs
-
-x-nx-node-modules-volume:
-  &nx-node-modules
-  type: bind
-  source: ./node_modules
-  target: /usr/src/root/node_modules
-
 services:
   clientapp:
+    extends:
+      file: docker-compose.base.yaml
+      service: nx-base
     build:
       dockerfile: ./apps/client-app/Dockerfile.dev
     volumes:
-      - *nx-env
-      - *nx-tools
-      - *nx-libs
-      - *nx-node-modules
       - ./apps/client-app/:/usr/src/root/apps/client-app
     ports:
       - '4200:4200'
