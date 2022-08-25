@@ -9,6 +9,7 @@
     "docker:dev:up": "cross-env NX_APP_ENV=dev docker compose up",
     "docker:local:up": "cross-env NX_APP_ENV=local docker compose up",
     "docker:up": "npm run docker:local:up",
+    "docker:down": "docker compose down",
     "docker:build": "docker compose build",
     "start": "nx serve",
     "build": "nx build",
