@@ -1,9 +1,3 @@
-/*
-npm run check: => node ./cmd-check.js ->
-- should accept an argument --only=docker|node
-- should check if the docker is installed. If it is not install it should halt the process with a message.
-- should check the node version if it does not match or if the node is not installed it should halt the process.
-*/
 const util = require('node:util');
 const path = require('path');
 const fs = require('fs');
@@ -36,11 +30,11 @@ const checkDocker = () => exec("docker --version", { shell: defaultShell })
   .catch((output) => ({ docker: false, dockerError: output.stderr }))
 
 const printNodeVersionError = () => {
-  console.error(`Please install the correct node version (${data.nvmNodeVersion})`);
+  console.error(`[Highhammer] Please install the correct node version (${data.nvmNodeVersion})`);
 }
 
 const printDockerError = () => {
-  console.error('Please install docker to run the project correctly.');
+  console.error('[Highhammer] Please install docker to run the project correctly.');
 }
 
 const checkDependencies = () => {

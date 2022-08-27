@@ -11,9 +11,18 @@
     "docker:up": "npm run docker:local:up",
     "docker:down": "docker compose down",
     "docker:build": "docker compose build",
-    "start": "nx serve",
-    "build": "nx build",
-    "test": "nx test"
+    "check": "npm run check:node-modules && npm run check:dependencies",
+    "check:node-modules": "node ./tools/dev-scripts/cmd-check-node-modules.js",
+    "check:dependencies": "node ./tools/dev-scripts/cmd-check-dependencies.js",
+    "setup": "npm run check:dependencies && npm install",
+    "start:qa": "npm run check && npm run docker:qa:up",
+    "start:dev": "npm run check && npm run docker:dev:up",
+    "start:local": "npm run check && npm run docker:local:up",
+    "start": "npm run start:local",
+    "stop": "node ./tools/dev-scripts/cmd-stop.js",
+    "nx:start": "nx serve",
+    "nx:build": "nx build",
+    "nx:test": "nx test"
   },
   "private": true,
   "devDependencies": {

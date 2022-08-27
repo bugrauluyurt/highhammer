@@ -22,7 +22,7 @@ const isNodeModuleDirEmpty = () => {
 const run = () => {
   isNodeModuleDirEmpty()
     .then(() => {
-      console.log('[Highhammer] node_modules checked successfully.')
+      console.log('[Highhammer] node_modules check successful.')
       process.exit(0);
     })
     .catch(() => {
