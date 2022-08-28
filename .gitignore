@@ -35,8 +35,7 @@ testem.log
 *.history
 .history/*
 /typings
-**/*.env
-**/env/*.env
+*.env*
 
 # System Files
 .DS_Store
