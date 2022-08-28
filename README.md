@@ -4,7 +4,7 @@
 
 This project was generated using [Nx](https://nx.dev).
 
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="450"></p>
+<p><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="100"></p>
 
 🔎 **Smart, Fast and Extensible Build System**
 
@@ -14,22 +14,50 @@ Nx supports many plugins which add capabilities for developing different types o
 
 These capabilities include generating applications, libraries, etc as well as the devtools to test, and build projects as well.
 
-Below are our core plugins:
+Below are the plugins that this project uses:
 
 - [React](https://reactjs.org)
   - `npm install --save-dev @nrwl/react`
 - Web (no framework frontends)
   - `npm install --save-dev @nrwl/web`
-- [Angular](https://angular.io)
-  - `npm install --save-dev @nrwl/angular`
 - [Nest](https://nestjs.com)
   - `npm install --save-dev @nrwl/nest`
-- [Express](https://expressjs.com)
-  - `npm install --save-dev @nrwl/express`
 - [Node](https://nodejs.org)
   - `npm install --save-dev @nrwl/node`
 
 There are also many [community plugins](https://nx.dev/community) you could add.
+
+## Development Setup
+
+This section explains how to setup the application for development.
+
+1. Install nvm to easily switch between node versions on your computer. You can find the documentation on how to install 'nvm' on your machine: `https://github.com/nvm-sh/nvm#installing-and-updating`
+
+2. Inside the root of the project directory run `nvm use`. This command is going to set the node version of your machine to the node version required for this project. If this does not work, find the node version written inside the ./.nvmrc file and run `nvm install ${REPLACE_WITH_NVMRC_NODE_VERSION}`. Then run `nvm use` again.
+
+3. Install Docker. Details on how to install docker to your system can be found inside the official documentation: `https://docs.docker.com/engine/install/`
+
+4. Run `npm run setup`. This command will check if the project dependencies are met, if so it is going to automatically run `npm install` on your machine.
+
+5. Add '.' to the beginning of the env files inside the ./config/env folder. This will make your env files invisible to git while enabling them inside the project.
+
+## Scripts
+
+The monorepo consists of three different applications.
+
+- client-app (React)
+- api-core (NestJS - Main interface of application REST api)
+- api-worker (NestJS - Worker app)
+
+These three applications can run at the same time or client-app can run only by itself according to the development needs.
+
+Here are some core development needs and the description of the default npm scripts to cover those needs:
+
+`npm run start`: Starts all the application inside the workspace while pointing the database urls to your local machine.
+
+`npm run stop`: Stops all the containers gracefully.
+
+`npm run stop:prune`: Stops all the containers while pruning all unused containers and deleting dangling images, which include the images with no tags (`<none>`)
 
 ## Generate an application
 
@@ -49,7 +77,7 @@ Libraries are shareable across libraries and applications. They can be imported 
 
 ## Development server
 
-Run `nx serve my-app` for a dev server. Navigate to http://localhost:4200/. The app will automatically reload if you change any of the source files.
+[TODO] To be written.
 
 ## Code scaffolding
 
@@ -78,17 +106,3 @@ Run `nx graph` to see a diagram of the dependencies of your projects.
 ## Further help
 
 Visit the [Nx Documentation](https://nx.dev) to learn more.
-
-
-
-## ☁ Nx Cloud
-
-### Distributed Computation Caching & Distributed Task Execution
-
-<p style="text-align: center;"><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-cloud-card.png"></p>
-
-Nx Cloud pairs with Nx in order to enable you to build and test code more rapidly, by up to 10 times. Even teams that are new to Nx can connect to Nx Cloud and start saving time instantly.
-
-Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
-
-Visit [Nx Cloud](https://nx.app/) to learn more.
