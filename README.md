@@ -53,11 +53,27 @@ These three applications can run at the same time or client-app can run only by 
 
 Here are some core development needs and the description of the default npm scripts to cover those needs:
 
-`npm run start`: Starts all the application inside the workspace while pointing the database urls to your local machine.
+`npm run start`: Starts all the applications inside the workspace while pointing all the data sources for `api-*` applications to your local machine. If DBs are empty in your local machine you might need to seed some data.
+
+`npm run start:qa`: Starts only the client-app while pointing all api references to remote deployed qa REST api.
+
+`npm run start:dev`: Starts only the client-app while pointing all api references to remote deployed dev REST api.
+
+`npm run start:local:host`: Please see `npm run start` (alias for this command).
+
+`npm run start:local:qa`: Starts all the applications inside the workspace while pointing the data sources inside the `api-*` applications (databases etc.) to `QA`.
+
+`npm run start:local:dev`: Starts all the applications inside the workspace while pointing the data sources inside the `api-*` applications (databases etc.) to `DEV`.
 
 `npm run stop`: Stops all the containers gracefully.
 
 `npm run stop:prune`: Stops all the containers while pruning all unused containers and deleting dangling images, which include the images with no tags (`<none>`)
+
+`nx:start`: Starts all the applications without the help of Docker containers. Not recommended since environment configs are tightly bound with the docker-compose flow.
+
+`nx:build`: Builds all the applications inside the monorepo into the ./dist folder. This command should be used before deployment.
+
+`nx:test`: Runs all the test suits for all applications inside the workspace.
 
 ## Generate an application
 
