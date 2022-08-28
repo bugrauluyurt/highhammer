@@ -33,6 +33,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 *.history
+.history/*
 /typings
 **/*.env
 
