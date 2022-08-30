@@ -1,9 +1,39 @@
 version: "3"
 
+# @INFO: Other API Services should be written here
 services:
+  nginx:
+    build:
+      dockerfile: ./config/nginx/Dockerfile.dev
+    ports:
+      - '8080:8080'
+      - '8081:8081'
+    restart: on-failure
+    networks:
+      - gateway
+    depends_on:
+      - client-app
+      - api-core
+  api-core:
+    container_name: api-core
+    build:
+      dockerfile: ./apps/api-core/Dockerfile.dev
+    extends:
+      file: docker-compose.base.yaml
+      service: nx-base
+    restart: on-failure
+    networks:
+      - gateway
+    volumes:
+      - ./apps/api-core/:/usr/src/root/apps/api-core
+    ports:
+      - '3333:3333'
   client-app:
     extends:
       file: docker-compose.yaml
       service: client-app
-
-# @TODO: Other API Services should be written here
+    restart: on-failure
+    networks:
+      - gateway
+networks:
+  gateway: {}

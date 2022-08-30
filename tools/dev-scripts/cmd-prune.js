@@ -9,7 +9,6 @@ const pruneContainers = () => {
 
 const pruneImages = () => {
   return execPromise('docker images | grep none').then((output) => {
-    console.log('output ======>', output)
     if (!output?.stdout?.length) {
       return;
     }

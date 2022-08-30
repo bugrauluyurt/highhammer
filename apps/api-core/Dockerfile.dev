@@ -1,0 +1,5 @@
+FROM node:16.17.0-alpine
+WORKDIR '/usr/src/root'
+# @INFO: node_modules folder is shared in between containers.
+COPY . .
+CMD ["npm", "run", "docker:api-core"]

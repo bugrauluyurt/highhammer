@@ -5,6 +5,7 @@
   "scripts": {
     "docker:pre": "node ./tools/dev-scripts/docker-pre.js",
     "docker:client-app": "npm run docker:pre client-app && nx run client-app:serve --host=0.0.0.0",
+    "docker:api-core": "npm run docker:pre api-core && nx run api-core:serve --host=0.0.0.0",
     "docker:qa:up": "cross-env NX_APP_ENV=qa docker compose up",
     "docker:dev:up": "cross-env NX_APP_ENV=dev docker compose up",
     "docker:local:host:up": "cross-env NX_APP_ENV=host docker compose -f ./docker-compose.local.yaml up",
