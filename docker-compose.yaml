@@ -2,7 +2,7 @@ version: "3"
 
 # @INFO: The application only runs the UI (client-app - React).
 services:
-  clientapp:
+  client-app:
     extends:
       file: docker-compose.base.yaml
       service: nx-base

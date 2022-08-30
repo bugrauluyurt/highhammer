@@ -4,11 +4,12 @@ const execPromise = util.promisify(require('node:child_process').exec);
 const pruneContainers = () => {
   return execPromise('docker container prune -f').catch((e) => {
     console.error('[Highhammer] An error occurred while pruning docker containers.', e);
-  });
+  }).finally(() => console.log('[Highhammer] Container prune completed.'));
 };
 
 const pruneImages = () => {
   return execPromise('docker images | grep none').then((output) => {
+    console.log('output ======>', output)
     if (!output?.stdout?.length) {
       return;
     }
@@ -28,7 +29,9 @@ const pruneImages = () => {
       }
     });
     return Promise.all(imageIdExecs);
-  })
+  }).catch(() => {
+    return 'error'
+  }).finally(() => console.log('[Highhammer] Image removal completed.'))
 };
 
 const stopDockerCompose = () => {

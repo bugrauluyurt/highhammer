@@ -1,9 +1,9 @@
 version: "3"
 
 services:
-  clientapp:
+  client-app:
     extends:
       file: docker-compose.yaml
-      service: clientapp
+      service: client-app
 
 # @TODO: Other API Services should be written here
