@@ -18,6 +18,4 @@
 !tsconfig.base.json
 !workspace.json
 !config/**/*.conf
-!config/**/*.pem
-!config/**/*.key
-!config/**/*.cert
+!config/certificates/*
