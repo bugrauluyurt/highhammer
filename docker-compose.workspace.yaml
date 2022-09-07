@@ -30,10 +30,12 @@ services:
       - '3333:3333'
   client-app:
     extends:
-      file: docker-compose.yaml
+      file: docker-compose.client-app.yaml
       service: client-app
     restart: on-failure
     networks:
       - gateway
+    depends_on:
+      - api-core
 networks:
   gateway: {}

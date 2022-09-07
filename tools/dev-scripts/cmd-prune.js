@@ -34,7 +34,7 @@ const pruneImages = () => {
 };
 
 const stopDockerCompose = () => {
-  return execPromise('docker compose down')
+  return execPromise('docker compose -f ./docker-compose.workspace.yaml down')
     .then((response) => {
       if (response?.stderr?.length) {
         console.log(response?.stderr);
