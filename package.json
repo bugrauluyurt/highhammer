@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {
     "docker:pre": "node ./tools/dev-scripts/docker-pre.js",
-    "docker:client-app": "npm run docker:pre client-app && nx run client-app:serve --host=0.0.0.0",
-    "docker:api-core": "npm run docker:pre api-core && nx run api-core:serve --host=0.0.0.0",
+    "docker:client-app": "npm run docker:pre client-app && npx nx run client-app:serve --host=0.0.0.0",
+    "docker:api-core": "npm run docker:pre api-core && npx nx run api-core:serve --host=0.0.0.0",
     "docker:qa:up": "cross-env NX_APP_ENV=qa docker compose up",
     "docker:dev:up": "cross-env NX_APP_ENV=dev docker compose up",
     "docker:local:host:up": "cross-env NX_APP_ENV=host docker compose -f ./docker-compose.local.yaml up",
@@ -26,9 +26,9 @@
     "start:local:dev": "npm run check && npm run docker:local:dev:up",
     "stop": "npm run docker:down",
     "stop:prune": "npm run docker:down && node ./tools/dev-scripts/cmd-prune.js",
-    "nx:start": "nx serve",
-    "nx:build": "nx build",
-    "nx:test": "nx test"
+    "nx:start": "npx nx serve",
+    "nx:build": "npx nx build",
+    "nx:test": "npx nx test"
   },
   "private": true,
   "devDependencies": {
