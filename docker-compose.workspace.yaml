@@ -7,8 +7,7 @@ services:
     build:
       dockerfile: ./config/nginx/Dockerfile.dev
     ports:
-      - '8080:8080'
-      - '8081:8081'
+      - '10443:10443'
     restart: on-failure
     networks:
       - gateway

@@ -1,2 +1,3 @@
 FROM nginx
 COPY ./config/nginx/default.dev.conf /etc/nginx/nginx.conf
+COPY ./config/certificates/ /etc/nginx/certificates/

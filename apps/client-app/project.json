@@ -51,7 +51,11 @@
       "defaultConfiguration": "development",
       "options": {
         "buildTarget": "client-app:build",
-        "hmr": true
+        "hmr": true,
+        "host": "localhost",
+        "ssl": true,
+        "sslKey": "config/certificates/localhost-key.pem",
+        "sslCert": "config/certificates/localhost.pem"
       },
       "configurations": {
         "development": {
