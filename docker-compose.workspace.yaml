@@ -3,6 +3,7 @@ version: "3"
 # @INFO: Other API Services should be written here
 services:
   nginx:
+    container_name: nginx-workspace
     build:
       dockerfile: ./config/nginx/Dockerfile.dev
     ports:
