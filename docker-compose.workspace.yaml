@@ -15,9 +15,37 @@ services:
     depends_on:
       - client-app
       - api-core
+  # Postgres
+  postgres:
+    container_name: postgres
+    image: postgres:latest
+    ports:
+      - '5432:5432'
+    volumes:
+      - /data/postgres:/data/postgres
+    env_file:
+      - ./config/env/.env.host
+    networks:
+    - database_pg
+  # PgAdmin
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4
+    ports:
+      - '8080:80'
+    volumes:
+      - /data/pgadmin:/root/.pgadmin
+    env_file:
+      - ./config/env/.env.host
+    networks:
+      - database_pg
+    depends_on:
+      - postgres
   # Api-Core: NestJS-Api
   api-core:
     container_name: api-core
+    ports:
+      - '3333:3333'
     build:
       dockerfile: ./apps/api-core/Dockerfile.dev
     extends:
@@ -26,10 +54,11 @@ services:
     restart: on-failure
     networks:
       - gateway
+      - database_pg
     volumes:
       - ./apps/api-core/:/usr/src/root/apps/api-core
-    ports:
-      - '3333:3333'
+    depends_on:
+      - postgres
   # Client-App: React App
   client-app:
     extends:
@@ -42,3 +71,5 @@ services:
       - api-core
 networks:
   gateway: {}
+  database_pg: {}
+

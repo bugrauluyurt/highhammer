@@ -29,6 +29,7 @@ node_modules
 /connect.lock
 /coverage
 /libpeerconnection.log
+/data
 **/*/certificates/*
 npm-debug.log
 yarn-error.log

@@ -17,6 +17,12 @@ async function bootstrap() {
   Logger.log(
     `🚀 Application is running on: http://localhost:${port}/${globalPrefix}`
   );
+  Logger.log({
+    NX_POSTGRES_HOST: process.env.NX_POSTGRES_HOST,
+    NX_POSTGRES_PORT: process.env.NX_POSTGRES_PORT,
+    NX_POSTGRES_USER: process.env.NX_POSTGRES_USER,
+    NX_POSTGRES_DB: process.env.NX_POSTGRES_DB
+  })
 }
 
 bootstrap();
