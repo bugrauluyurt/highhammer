@@ -2,6 +2,7 @@ version: "3"
 
 # @INFO: Other API Services should be written here
 services:
+  # Nginx
   nginx:
     container_name: nginx-workspace
     build:
@@ -14,6 +15,7 @@ services:
     depends_on:
       - client-app
       - api-core
+  # Api-Core: NestJS-Api
   api-core:
     container_name: api-core
     build:
@@ -28,6 +30,7 @@ services:
       - ./apps/api-core/:/usr/src/root/apps/api-core
     ports:
       - '3333:3333'
+  # Client-App: React App
   client-app:
     extends:
       file: docker-compose.client-app.yaml
