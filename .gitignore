@@ -31,6 +31,7 @@ node_modules
 /libpeerconnection.log
 /data
 **/*/certificates/*
+!**/*/certificates/.gitkeep
 npm-debug.log
 yarn-error.log
 testem.log
