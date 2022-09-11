@@ -49,15 +49,16 @@ const checkEnvFiles = () => {
 }
 
 const checkCertificates = () => {
-  const keyExists = fs.existsSync(path.resolve(__dirname, '../../config/certificates/localhost.key'));
-  const crtExists = fs.existsSync(path.resolve(__dirname, '../../config/certificates/localhost.crt'));
+  const keyExists = fs.existsSync(path.resolve(__dirname, '../../config/certificates/localhost-key.pem'));
+  const crtExists = fs.existsSync(path.resolve(__dirname, '../../config/certificates/localhost-crt.pem'));
   const certificates = { keyExists, crtExists };
   if (!certificates.crtExists || !certificates.keyExists) {
+    console.log('[Highhammer] Please make sure you install mkcert before generating your certificates.')
     if (!certificates.crtExists) {
-      console.error('[Highhammer] Please generate a localhost.crt file inside your ./config/certificates/ folder.');
+      console.error('[Highhammer] Please generate a localhost-crt.pem file inside your ./config/certificates/ folder by using mkcert.');
     }
     if (!certificates.keyExists) {
-      console.error('[Highhammer] Please generate a localhost.key file inside your ./config/certificates/ folder.');
+      console.error('[Highhammer] Please generate a localhost-key.pem file inside your ./config/certificates/ folder by using mkcert.');
     }
     process.exit(1);
   }

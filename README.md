@@ -41,6 +41,8 @@ This section explains how to setup the application for development.
 
 5. Add '.' to the beginning of the env files inside the ./config/env folder. This will make your env files invisible to git while enabling them inside the project.
 
+6. Generate certificates. Certificate generation can easily be done by using mkcert
+
 ## Scripts
 
 The monorepo consists of three different applications.

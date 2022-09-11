@@ -55,8 +55,8 @@
         "hmr": true,
         "host": "localhost",
         "ssl": true,
-        "sslKey": "config/certificates/localhost.key",
-        "sslCert": "config/certificates/localhost.crt"
+        "sslKey": "config/certificates/localhost-key.pem",
+        "sslCert": "config/certificates/localhost-crt.pem"
       },
       "configurations": {
         "development": {
