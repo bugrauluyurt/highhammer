@@ -26,11 +26,11 @@
     "start:workspace:dev": "npm run check && npm run docker:workspace:dev:up",
     "stop": "npm run docker:down",
     "stop:prune": "npm run docker:down -- --rmi=all --volumes --remove-orphans && node ./tools/dev-scripts/cmd-prune.js",
-    "nx:start": "npx nx serve",
-    "nx:build": "npx nx build",
-    "nx:test": "npx nx test",
-    "nx:migrate:latest": "npx nx migrate latest",
-    "nx:migrate:run": "nx migrate --run-migrations"
+    "nx:start": "npm run check:dependencies -- --only=node && npx nx serve",
+    "nx:build": "npm run check:dependencies -- --only=node && npx nx build",
+    "nx:test": "npm run check:dependencies -- --only=node && npx nx test",
+    "nx:migrate:latest": "npm run check:dependencies -- --only=node && npx nx migrate latest",
+    "nx:migrate:run": "npm run check:dependencies -- --only=node && nx migrate --run-migrations"
   },
   "private": true,
   "devDependencies": {

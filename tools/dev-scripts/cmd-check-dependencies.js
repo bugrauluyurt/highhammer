@@ -35,15 +35,15 @@ const checkEnvFiles = () => {
   const devEnvExists = fs.existsSync(path.resolve(__dirname, '../../config/env/.env.dev'));
   if (!hostEnvExists || !qaEnvExists || !devEnvExists) {
     if (!hostEnvExists) {
-      console.error('[Highhammer] Please put .env.host file inside your ./config/env/ folder.');
+      console.error('[Highhammer][Error] Please put .env.host file inside your ./config/env/ folder.');
     }
     if (!qaEnvExists) {
-      console.error('[Highhammer] Please put .env.qa file inside your ./config/env/ folder.');
+      console.error('[Highhammer][Error] Please put .env.qa file inside your ./config/env/ folder.');
     }
     if (!devEnvExists) {
-      console.error('[Highhammer] Please put .env.dev file inside your ./config/env/ folder.');
+      console.error('[Highhammer][Error] Please put .env.dev file inside your ./config/env/ folder.');
     }
-    console.error('[Highhammer] You can copy the template .env.${HOST_ENV} file from ./config/env folder for each environment.');
+    console.error('[Highhammer][Info] You can copy the template .env.${HOST_ENV} file from ./config/env folder for each environment.');
     process.exit(1);
   }
 }
@@ -53,29 +53,26 @@ const checkCertificates = () => {
   const crtExists = fs.existsSync(path.resolve(__dirname, '../../config/certificates/localhost-crt.pem'));
   const certificates = { keyExists, crtExists };
   if (!certificates.crtExists || !certificates.keyExists) {
-    console.log('[Highhammer] Please make sure you install mkcert before generating your certificates.')
+    console.log('[Highhammer][Error] Please make sure you install mkcert before generating your certificates.')
     if (!certificates.crtExists) {
-      console.error('[Highhammer] Please generate a localhost-crt.pem file inside your ./config/certificates/ folder by using mkcert.');
+      console.error('[Highhammer][Error] Please generate a localhost-crt.pem file inside your ./config/certificates/ folder by using mkcert.');
     }
     if (!certificates.keyExists) {
-      console.error('[Highhammer] Please generate a localhost-key.pem file inside your ./config/certificates/ folder by using mkcert.');
+      console.error('[Highhammer][Error] Please generate a localhost-key.pem file inside your ./config/certificates/ folder by using mkcert.');
     }
     process.exit(1);
   }
 }
 
 const printNodeVersionError = (data) => {
-  console.error(`[Highhammer] Please use the correct node version -> ${data?.nvmNodeVersion}`);
+  console.error(`[Highhammer][Error] Please use the correct node version -> ${data?.nvmNodeVersion}`);
 }
 
 const printDockerError = () => {
-  console.error('[Highhammer] Please install docker to run the project correctly.');
+  console.error('[Highhammer][Error] Please install docker to run the project correctly.');
 }
 
 const checkDependencies = () => {
-  checkEnvFiles();
-  checkCertificates();
-
   let request = [
     checkNodeVersion(),
     checkNvmVersion(),
@@ -86,12 +83,20 @@ const checkDependencies = () => {
   const isOnlyNode = only === 'node';
   const isOnlyDocker = only === 'docker';
 
-  if (isOnlyNode) {
-    request = [checkNodeVersion(), checkNvmVersion()]
-  }
+  const partialCheckEnabled = isOnlyNode || isOnlyDocker
 
-  if (isOnlyDocker) {
-    request = [checkDocker()];
+  if (!partialCheckEnabled) {
+    checkEnvFiles();
+    checkCertificates();
+  } else {
+    if (isOnlyNode) {
+      console.log('[Highhammer] Checking only node and nvm version.');
+      request = [checkNodeVersion(), checkNvmVersion()]
+    }
+    if (isOnlyDocker) {
+      console.log('[Highhammer] Checking only docker dependency validity.');
+      request = [checkDocker()];
+    }
   }
 
   Promise.all(request)
