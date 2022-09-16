@@ -22,7 +22,7 @@ services:
     ports:
       - '5432:5432'
     volumes:
-      - /data/postgres:/data/postgres
+      - /tmp/data/postgres:/data/postgres
     env_file:
       - ./config/env/.env.host
     networks:
@@ -34,7 +34,7 @@ services:
     ports:
       - '8080:80'
     volumes:
-      - /data/pgadmin:/root/.pgadmin
+      - /tmp/data/pgadmin:/root/.pgadmin
     env_file:
       - ./config/env/.env.host
     networks:

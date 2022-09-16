@@ -29,7 +29,8 @@ node_modules
 /connect.lock
 /coverage
 /libpeerconnection.log
-/data
+/data/*
+!/data/.gitkeep
 **/*/certificates/*
 !**/*/certificates/.gitkeep
 npm-debug.log
