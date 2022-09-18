@@ -1,6 +1,6 @@
 # Highhammer
 
-Full-stack starter project with Nx, NestJs, React and Docker.
+Full-stack monorepo starter project with Nx, NestJs, React and Docker.
 
 <!-- <p><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="100"></p> -->
 
