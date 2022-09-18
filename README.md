@@ -1,12 +1,12 @@
 # Highhammer
 
-This project was generated using [Nx](https://nx.dev).
+Full-stack starter project with Nx, NestJs, React and Docker.
 
-<p><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="100"></p>
+<!-- <p><img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" width="100"></p> -->
 
 ## Nx plugins used in this project
 
-Below are the plugins that this project uses:
+Below are the Nx plugins that this project uses:
 
 - Web (no framework frontends): `@nrwl/web`
 - [React](https://reactjs.org): `@nrwl/react`
