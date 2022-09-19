@@ -4,14 +4,16 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/node:webpack",
+      "executor": "@nrwl/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/api-worker",
         "main": "apps/api-worker/src/main.ts",
         "tsConfig": "apps/api-worker/tsconfig.app.json",
         "assets": ["apps/api-worker/src/assets"],
-        "generatePackageJson": true
+        "generatePackageJson": true,
+        "target": "node",
+        "compiler": "tsc"
       },
       "configurations": {
         "production": {
