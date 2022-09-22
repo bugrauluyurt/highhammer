@@ -17,7 +17,7 @@
     "check": "npm run check:node-modules && npm run check:dependencies",
     "check:node-modules": "node ./tools/dev-scripts/cmd-check-node-modules.js",
     "check:dependencies": "node ./tools/dev-scripts/cmd-check-dependencies.js",
-    "setup": "npm run check:dependencies && npm install",
+    "setup": "npm install",
     "start": "npm run start:workspace:host",
     "start:client:qa": "npm run check && npm run docker:client:qa:up",
     "start:client:dev": "npm run check && npm run docker:client:dev:up",

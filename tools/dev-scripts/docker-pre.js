@@ -2,14 +2,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const dotEnv = require('dotenv');
-
-const setEnvVariables = () => {
-  console.log('Setting environment variables...')
-  const envPath = path.resolve(__dirname, '../../.env')
-  dotEnv.config({ path: envPath })
-  console.log('NX_APP_NAME =>', process.env.NX_APP_NAME)
-}
 
 const getWorkSpacePath = () => path.resolve(__dirname, '../../workspace.json')
 
