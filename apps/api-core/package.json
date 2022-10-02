@@ -1,0 +1,19 @@
+{
+  "name": "api-core",
+  "version": "0.0.0",
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "@nestjs/common": "^9.0.0",
+    "@nestjs/core": "^9.0.0",
+    "@nestjs/platform-express": "^9.0.0",
+    "async": "^3.2.4",
+    "bluebird": "^3.7.2",
+    "core-js": "^3.6.5",
+    "reflect-metadata": "^0.1.13",
+    "regenerator-runtime": "0.13.7",
+    "rxjs": "^7.0.0",
+    "tslib": "^2.3.0"
+  }
+}
+
