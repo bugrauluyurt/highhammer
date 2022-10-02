@@ -22,6 +22,8 @@ This section explains how to setup the application for development.
 
 - **Install Docker**: Details on how to install docker to your system can be found inside the official documentation: `https://docs.docker.com/engine/install/`
 
+- **Install pnpm**: This repository uses pnpm to manage the dependencies of apps & libs existing inside the monorepo architecture. To install pnpm run `npm install -g pnpm`.
+
 - **Generate .env files**: Add '.' to the beginning of the env files inside the ./config/env folder. This will make your env files invisible to git while enabling them inside the project.
 
 - **SSL setup**: Trusted certificate generation is necessary for SSL. It can easily be done by using `mkcert`. Mkcert can easily be installed by using `brew`. After the installation, please follow the steps given below:
@@ -32,9 +34,9 @@ $ cd config/certificates
 $ mkcert -key-file localhost-key.pem -cert-file localhost-crt.pem localhost
 ```
 
-- Run `npm run setup`. This command will check if the project dependencies are met, if so it is going to automatically run `npm install` on your machine.
+- Run `pnpm setup`. This command will automatically install all the dependencies for your apps & libs inside the monorepo.
 
-- Run `npm run start`. After running this command, please wait for all docker containers to be up. Then navigate to `https://localhost:10443`.
+- Run `pnpm start`. After running this command, please wait for all docker containers to be up. Then navigate to `https://localhost:10443`.
 
 ## Useful scripts
 
@@ -48,27 +50,29 @@ These three applications can run **at the same time (React-SPA, Rest-API, Worker
 
 Here are some core development needs and the description of the default npm scripts to cover those needs:
 
-- `npm run start`: Starts all the applications inside the workspace while pointing all the data sources for `api-*` applications to your local machine. If DBs are empty in your local machine you might need to seed some data.
+- `pnpm start`: Starts all the applications inside the workspace while pointing all the data sources for `api-*` applications to your local machine. If DBs are empty in your local machine you might need to seed some data.
 
-- `npm run start:client:qa`: Starts only the client-app while pointing all api references to remote deployed `QA` REST api.
+- `pnpm start:client:qa`: Starts only the client-app while pointing all api references to remote deployed `QA` REST api.
 
-- `npm run start:client:dev`: Starts only the client-app while pointing all api references to remote deployed `DEV` REST api.
+- `pnpm start:client:dev`: Starts only the client-app while pointing all api references to remote deployed `DEV` REST api.
 
-- `npm run start:workspace:host`: Please see `npm run start` (alias for this command).
+- `pnpm start:workspace:host`: Please see `pnpm start` (alias for this command).
 
-- `npm run start:workspace:qa`: Starts all the applications inside the workspace while pointing the data sources inside the `api-*` applications (databases etc.) to `QA`.
+- `pnpm start:workspace:qa`: Starts all the applications inside the workspace while pointing the data sources inside the `api-*` applications (databases etc.) to `QA`.
 
-- `npm run start:workspace:dev`: Starts all the applications inside the workspace while pointing the data sources inside the `api-*` applications (databases etc.) to `DEV`.
+- `pnpm start:workspace:dev`: Starts all the applications inside the workspace while pointing the data sources inside the `api-*` applications (databases etc.) to `DEV`.
 
-- `npm run stop`: Stops all the containers gracefully.
+- `pnpm stop`: Stops all the containers gracefully.
 
-- `npm run stop:prune`: Stops all the containers while pruning all unused containers and deleting all images. Dangling images which does not include a tag (`<none>`) are also deleted by this command.
+- `pnpm stop:prune`: Stops all the containers while pruning all unused containers and deleting all images. Dangling images which does not include a tag (`<none>`) are also deleted by this command.
 
-- `nx:start`: Starts all the applications without the help of Docker containers. Not recommended since environment configs are tightly bound with the docker-compose flow.
+- `pnpm nx:start`: Starts all the applications without the help of Docker containers. Not recommended since environment configs are tightly bound with the docker-compose flow.
 
-- `nx:build`: Builds all the applications inside the monorepo into the ./dist folder. This command should be used before deployment.
+- `pnpm nx:build`: Builds all the applications inside the monorepo into the ./dist folder. This command should be used during deployment.
 
-- `nx:test`: Runs all the test suits for all applications inside the workspace.
+- `pnpm nx:test`: Runs all the test suits for all applications inside the workspace.
+
+- `pnpm nx:test:affected`: Runs all the test suits for the affected applications by the recent changes. NX handles the comparison in between the HEAD of the current branch to the target branch where PR has been opened.
 
 ## Generating a library
 
@@ -81,22 +85,6 @@ Libraries are shareable across libraries and applications. They can be imported 
 ## Code scaffolding
 
 Run `nx g @nrwl/react:component my-component --project=client-app` to generate a new component.
-
-## Build
-
-Run `nx build my-app` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
-
-## Running unit tests
-
-Run `nx test` to execute the unit tests via [Jest](https://jestjs.io).
-
-Run `nx affected:test` to execute the unit tests affected by a change.
-
-## Running end-to-end tests
-
-Run `nx e2e client-app-e2e` to execute the end-to-end tests via [Cypress](https://www.cypress.io).
-
-Run `nx affected:e2e` to execute the end-to-end tests affected by a change.
 
 ## Understand your workspace
 
