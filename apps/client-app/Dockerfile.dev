@@ -1,5 +1,6 @@
 FROM node:16.17.0-alpine
 WORKDIR '/usr/src/root'
 # @INFO: node_modules folder is shared in between containers.
+RUN npm install -g pnpm
 COPY . .
-CMD ["npm", "run", "docker:client-app"]
+CMD ["pnpm", "docker:client-app"]
