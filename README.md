@@ -37,7 +37,7 @@ $ cd config/certificates
 $ mkcert -key-file localhost-key.pem -cert-file localhost-crt.pem localhost
 ```
 
-- Run `pnpm setup`. This command will automatically install all the dependencies for your apps & libs inside the monorepo.
+- Run `pnpm install`. This command will automatically install all the dependencies for your apps & libs inside the monorepo recursively.
 
 - Run `pnpm start`. After running this command, please wait for all docker containers to be up. Then navigate to `https://localhost:10443`.
 
