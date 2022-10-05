@@ -66,6 +66,7 @@ const checkCertificates = () => {
 
 const printNodeVersionError = (data) => {
   console.error(`[Highhammer][Error] Please use the correct node version -> ${data?.nvmNodeVersion}`);
+  console.error(`[Highhammer][Error] If you have already run 'pnpm install' or 'pnpm setup' please delete all **/*/node_modules folders inside your project.`);
 }
 
 const printDockerError = () => {

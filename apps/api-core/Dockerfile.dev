@@ -1,6 +1,8 @@
 FROM node:16.17.0-alpine
 WORKDIR '/usr/src/root'
-# @INFO: node_modules folder is shared in between containers.
 RUN npm install -g pnpm
+# Copy is put before install intentionally. 'COPY . .' only copies the package.json files of the projects. Rest is seperately mounted
 COPY . .
+RUN node ./tools/dev-scripts/cmd-pre-pnpm-install.js api-core
+RUN pnpm install
 CMD ["pnpm", "docker:api-core"]

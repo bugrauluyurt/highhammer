@@ -16,11 +16,12 @@
 !postcss.config.js
 !tailwind.config.js
 !nx.json
-!package-lock.json
-!package.json
+!**/package-lock.json
+!**/package.json
 !pnpm-lock.yaml
 !pnpm-workspace.yaml
 !tsconfig.base.json
 !workspace.json
 !config/**/*.conf
 !config/certificates/*
+!tools/dev-scripts/*

@@ -30,4 +30,4 @@ services:
       - *nx-env
       - *nx-tools
       - *nx-libs
-      - *nx-node-modules
+      # - *nx-node-modules
