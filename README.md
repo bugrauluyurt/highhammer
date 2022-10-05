@@ -27,7 +27,7 @@ This section explains how to setup the application for development.
 
 - **Install pnpm**: This repository uses pnpm to manage the dependencies of apps & libs existing inside the monorepo architecture. To install pnpm run `npm install -g pnpm`.
 
-- **Generate .env files**: Add '.' to the beginning of the env files inside the ./config/env folder. This will make your env files invisible to git while enabling them inside the project.
+- **Generate .env files**: Make copies of all env files inside the ./config/env folder. Add '.' to the beginning of all. This will make your env files invisible to git while enabling them inside the project.
 
 - **SSL setup**: Trusted certificate generation is necessary for SSL. It can easily be done by using `mkcert`. Mkcert can easily be installed by using `brew`. After the installation, please follow the steps given below:
 
