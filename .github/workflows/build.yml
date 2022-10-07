@@ -30,8 +30,8 @@ jobs:
       # Export the branch names as output to be able to use it in other jobs
       base-branch-name: ${{ steps.get-base-branch-name.outputs.branch }}
       branch-name: ${{ steps.branch-name.outputs.current_branch }}
-  # Cache and install
-  cache-and-install:
+  get-affected:
+    needs: [branch-info]
     runs-on: ubuntu-latest
     steps:
       # Check out the repository
@@ -43,33 +43,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16.17.0"
-      # Pre-Install Pnpm
-      - name: Install pnpm
-        id: pnpm-install
-        uses: pnpm/action-setup@v2.2.2
-        with:
-          version: "7.x"
-          run_install: false
-      # Get pnpm store
-      - name: Get pnpm store directory
-        id: pnpm-cache
-        run: |
-          echo "::set-output name=pnpm_cache_dir::$(pnpm store path)"
-      # Setup pnpm cache
-      - uses: actions/cache@v3
-        name: Setup pnpm cache
-        with:
-          path: ${{ steps.pnpm-cache.outputs.pnpm_cache_dir }}
-          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+          cache: 'pnpm'
       # Install workspace dependencies
       - name: Install dependencies
         run: pnpm install
-  get-affected:
-    needs: [branch-info, cache-and-install]
-    runs-on: ubuntu-latest
-    steps:
       # Configure Nx to be able to detect changes between branches when we are in a PR
       - name: Derive appropriate SHAs for base and head for `nx affected` commands
         uses: nrwl/nx-set-shas@v3
