@@ -57,3 +57,15 @@ jobs:
         uses: nrwl/nx-set-shas@v3
         with:
           main-branch-name: ${{needs.branch-info.outputs.base-branch-name}}
+      # Set the affected arrays
+      - name: Get affected
+        id: get-projects-arrays
+        # When not in a PR and the current branch is main, pass --all flag. Otherwise pass the base branch
+        run: |
+            if [[ "${{github.event.pull_request.base.ref}}" == "" && "${{needs.branch-info.outputs.branch-name}}" == "main" ]]; then
+              echo "::set-output name=test-unit::$(node tools/dev-scripts/print-affected-array.js test:unit --all)"
+            else
+              echo "::set-output name=test-unit::$(node tools/dev-scripts/print-affected-array.js test:unit origin/${{needs.branch-info.outputs.base-branch-name}})"
+            fi
+    outputs:
+      test-unit: ${{ steps.get-projects-arrays.outputs.test-unit }}
