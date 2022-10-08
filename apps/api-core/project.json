@@ -44,7 +44,8 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/api-core/**/*.ts"]
+        "lintFilePatterns": ["apps/api-core/**/*.ts"],
+        "ignorePath": "apps/api-core/.eslintignore"
       }
     },
     "test": {
