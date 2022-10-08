@@ -67,6 +67,8 @@ jobs:
             else
               echo "::set-output name=test-unit::$(node tools/dev-scripts/cmd-print-affected-array.js test origin/${{needs.branch-info.outputs.base-branch-name}})"
             fi
+      - name: Print affected
+        run: echo ${{join(steps.get-projects-arrays.outputs.*, '\n')}}
     outputs:
       test-unit: ${{ steps.get-projects-arrays.outputs.test-unit }}
   test-unit:
