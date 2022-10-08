@@ -63,9 +63,9 @@ jobs:
         # When not in a PR and the current branch is main, pass --all flag. Otherwise pass the base branch
         run: |
             if [[ "${{github.event.pull_request.base.ref}}" == "" && "${{needs.branch-info.outputs.branch-name}}" == "main" ]]; then
-              echo "::set-output name=test-unit::$(node tools/dev-scripts/cmd-print-affected-array.js test:unit --all)"
+              echo "::set-output name=test-unit::$(node tools/dev-scripts/cmd-print-affected-array.js test --all)"
             else
-              echo "::set-output name=test-unit::$(node tools/dev-scripts/cmd-print-affected-array.js test:unit origin/${{needs.branch-info.outputs.base-branch-name}})"
+              echo "::set-output name=test-unit::$(node tools/dev-scripts/cmd-print-affected-array.js test origin/${{needs.branch-info.outputs.base-branch-name}})"
             fi
     outputs:
       test-unit: ${{ steps.get-projects-arrays.outputs.test-unit }}
