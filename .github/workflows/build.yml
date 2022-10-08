@@ -100,7 +100,7 @@ jobs:
         run: pnpm install
       # Run test:unit script in the affected project
       - name: Test unit
-        run: pnpm nx test:unit ${{ matrix.projectName }}
+        run: pnpm nx run ${{ matrix.projectName }}:test
   build-finished:
     runs-on: ubuntu-latest
     needs: [test-unit]
