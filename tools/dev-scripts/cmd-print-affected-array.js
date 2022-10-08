@@ -87,7 +87,9 @@ async function allProjectsContainingTask(taskName) {
 }
 
 async function printAffectedProjectsContainingTask() {
-  const projects = BASE_BRANCH_NAME === ALL_FLAG ? await allProjectsContainingTask(TASK_NAME) : await affectedProjectsContainingTask(TASK_NAME, BASE_BRANCH_NAME);
+  const projects = BASE_BRANCH_NAME === ALL_FLAG
+    ? await allProjectsContainingTask(TASK_NAME)
+    : await affectedProjectsContainingTask(TASK_NAME, BASE_BRANCH_NAME);
   console.log(JSON.stringify(projects));
 }
 
