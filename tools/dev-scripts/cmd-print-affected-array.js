@@ -7,7 +7,7 @@ const processArguments = process.argv.slice(2);
 const ALL_FLAG = "--all";
 const TASK_NAME = processArguments[0];
 const BASE_BRANCH_NAME = processArguments[1];
-const ROOT_PATH = path.resolve(__dirname, "..");
+const ROOT_PATH = path.resolve(__dirname, "../..");
 const ENCODING_TYPE = "utf8";
 const NEW_LINE_CHAR = "\n";
 
