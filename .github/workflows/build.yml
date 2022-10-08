@@ -143,7 +143,7 @@ jobs:
     needs: [test-unit, lint]
     if: |
       always() &&
-      (needs.test-unit.result == 'success' || needs.test-unit.result == 'skipped')
+      (needs.test-unit.result == 'success' || needs.test-unit.result == 'skipped') &&
       (needs.lint.result == 'success' || needs.lint.result == 'skipped')
     steps:
       - name: Trace
