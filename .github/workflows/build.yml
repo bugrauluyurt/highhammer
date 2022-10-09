@@ -70,7 +70,9 @@ jobs:
               echo "::set-output name=lint::$(node tools/dev-scripts/cmd-print-affected-array.js lint origin/${{needs.branch-info.outputs.base-branch-name}})"
             fi
       - name: Print affected
-        run: echo ${{join(steps.get-projects-arrays.outputs.*, '\n')}}
+        run: |
+          echo "Test-Unit (Affected): ${{steps.get-projects-arrays.outputs.test-unit}}"
+          echo "Lint (Affected): ${{steps.get-projects-arrays.outputs.lint}}"
     outputs:
       test-unit: ${{ steps.get-projects-arrays.outputs.test-unit }}
       lint: ${{ steps.get-projects-arrays.outputs.lint }}
