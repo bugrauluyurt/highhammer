@@ -2,7 +2,6 @@
   "name": "highhammer",
   "version": "0.0.0",
   "license": "MIT",
-  "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
     "docker:pre": "node ./tools/dev-scripts/docker-pre.js",
@@ -35,23 +34,7 @@
     "nx:migrate:latest": "pnpm check:dependencies --only=node && pnpm nx migrate latest",
     "nx:migrate:run": "pnpm check:dependencies --only=node && pnpm install --no-frozen-lockfile && pnpm nx migrate --run-migrations"
   },
-  "dependencies": {
-    "@nestjs/common": "^9.0.0",
-    "@nestjs/core": "^9.0.0",
-    "@nestjs/platform-express": "^9.0.0",
-    "async": "^3.2.4",
-    "bluebird": "^3.7.2",
-    "core-js": "^3.6.5",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
-    "react-is": "18.2.0",
-    "react-router-dom": "6.3.0",
-    "reflect-metadata": "^0.1.13",
-    "regenerator-runtime": "0.13.7",
-    "rxjs": "^7.0.0",
-    "styled-components": "5.3.5",
-    "tslib": "^2.3.0"
-  },
+  "private": true,
   "devDependencies": {
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
