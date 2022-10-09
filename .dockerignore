@@ -24,4 +24,5 @@
 !workspace.json
 !config/**/*.conf
 !config/certificates/*
+!config/pnpm/*
 !tools/dev-scripts/*

@@ -42,6 +42,14 @@ services:
     depends_on:
       - postgres
   # Api-Core: NestJS-Api
+  pnpm-store:
+    container_name: pnpm-store
+    # @TODO: Write ports here for pnpm-store
+    build:
+      dockerfile: ./config/pnpm/Dockerfile.pnpm-store
+    restart: on-failure
+    volumes:
+      - pnpm-store:/usr/src/root/.pnpm-store
   api-core:
     container_name: api-core
     ports:
@@ -52,12 +60,15 @@ services:
       file: docker-compose.base.yaml
       service: nx-base
     restart: on-failure
+    volumes:
+      - ./apps/api-core/:/usr/src/root/apps/api-core
+      - pnpm-store:/usr/src/root/.pnpm-store
     networks:
       - gateway
       - database_pg
-    volumes:
-      - ./apps/api-core/:/usr/src/root/apps/api-core
+    # @TODO: Write health-check here instead of pnpm-store dependency.
     depends_on:
+      - pnpm-store
       - postgres
   # Client-App: React App
   client-app:
@@ -65,11 +76,17 @@ services:
       file: docker-compose.client-app.yaml
       service: client-app
     restart: on-failure
+    volumes:
+      - pnpm-store:/usr/src/root/.pnpm-store
     networks:
       - gateway
+    # @TODO: Write health-check here instead of pnpm-store dependency.
     depends_on:
+      - pnpm-store
       - api-core
 networks:
   gateway: {}
   database_pg: {}
+volumes:
+  pnpm-store:
 

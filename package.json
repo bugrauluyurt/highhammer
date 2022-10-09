@@ -18,7 +18,7 @@
     "check": "pnpm check:node-modules && npm run check:dependencies",
     "check:node-modules": "node ./tools/dev-scripts/cmd-check-node-modules.js",
     "check:dependencies": "node ./tools/dev-scripts/cmd-check-dependencies.js",
-    "start": "pnpm start:workspace:host",
+    "start": "pnpm install && pnpm start:workspace:host",
     "start:client:qa": "pnpm check && pnpm docker:client:qa:up",
     "start:client:dev": "pnpm check && pnpm docker:client:dev:up",
     "start:workspace:host": "pnpm check && pnpm docker:workspace:host:up",
