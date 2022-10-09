@@ -74,8 +74,17 @@ function getAffectedCommandResult(str) {
 
 async function affectedProjectsContainingTask(taskName, baseBranch) {
   // pnpm nx print-affected --target=[task] --base [base branch] --select=tasks.target.project
+  const args = [
+    "nx",
+    "print-affected",
+     "--target",
+     taskName,
+     baseBranch ? "--base" : undefined,
+     baseBranch || undefined,
+     "--select=tasks.target.project"
+  ].filter(Boolean)
   return commaSeparatedListToArray(getAffectedCommandResult(
-    await pnpmRun("nx", "print-affected",  "--target", taskName, "--base", baseBranch, "--select=tasks.target.project")
+    await pnpmRun(...args)
   ));
 }
 
