@@ -12,5 +12,5 @@ COPY ./apps/api-core/package.json ./apps/api-core/
 COPY ./apps/api-worker/package.json ./apps/api-worker/
 RUN pnpm config set store-dir ./.pnpm-store
 RUN pnpm install
-# @TODO: Might need to serve something here for successful health-check implementation inside the docker-compose.
-ENTRYPOINT ["tail", "-f", "/dev/null"]
+# @INFO: Serving the current folder only for health check purposes.
+ENTRYPOINT ["pnpm", "http-server"]

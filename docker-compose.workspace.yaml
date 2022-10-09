@@ -26,7 +26,8 @@ services:
     env_file:
       - ./config/env/.env.host
     networks:
-    - database_pg
+      - gateway
+      - database_pg
   # PgAdmin
   pgadmin:
     container_name: pgadmin
@@ -38,18 +39,23 @@ services:
     env_file:
       - ./config/env/.env.host
     networks:
+      - gateway
       - database_pg
     depends_on:
       - postgres
-  # Api-Core: NestJS-Api
+  # Pnpm-store: Store to cache all node modules of the workspace
   pnpm-store:
     container_name: pnpm-store
-    # @TODO: Write ports here for pnpm-store
+    ports:
+      - '4040:8080'
     build:
       dockerfile: ./config/pnpm/Dockerfile.pnpm-store
     restart: on-failure
     volumes:
       - pnpm-store:/usr/src/root/.pnpm-store
+    networks:
+      - gateway
+  # Api-core: NestJS-Api
   api-core:
     container_name: api-core
     ports:
@@ -62,27 +68,27 @@ services:
     restart: on-failure
     volumes:
       - ./apps/api-core/:/usr/src/root/apps/api-core
-      - pnpm-store:/usr/src/root/.pnpm-store
     networks:
       - gateway
       - database_pg
-    # @TODO: Write health-check here instead of pnpm-store dependency.
     depends_on:
-      - pnpm-store
       - postgres
   # Client-App: React App
   client-app:
+    container_name: client-app
+    ports:
+      - '4200:4200'
+    build:
+      dockerfile: ./apps/client-app/Dockerfile.dev
     extends:
-      file: docker-compose.client-app.yaml
-      service: client-app
+      file: docker-compose.base.yaml
+      service: nx-base
     restart: on-failure
     volumes:
-      - pnpm-store:/usr/src/root/.pnpm-store
+      - ./apps/client-app/:/usr/src/root/apps/client-app
     networks:
       - gateway
-    # @TODO: Write health-check here instead of pnpm-store dependency.
     depends_on:
-      - pnpm-store
       - api-core
 networks:
   gateway: {}
