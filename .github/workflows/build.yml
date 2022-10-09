@@ -69,10 +69,13 @@ jobs:
               echo "::set-output name=test-unit::$(node tools/dev-scripts/cmd-print-affected-array.js test origin/${{needs.branch-info.outputs.base-branch-name}})"
               echo "::set-output name=lint::$(node tools/dev-scripts/cmd-print-affected-array.js lint origin/${{needs.branch-info.outputs.base-branch-name}})"
             fi
+            echo "::set-output name=build::$(node tools/dev-scripts/cmd-print-affected-array.js build origin/${{needs.branch-info.outputs.base-branch-name}})"
+
       - name: Print affected
         run: |
           echo "Test-Unit (Affected): ${{steps.get-projects-arrays.outputs.test-unit}}"
           echo "Lint (Affected): ${{steps.get-projects-arrays.outputs.lint}}"
+          echo "Build (Affected): ${{steps.get-projects-arrays.outputs.build}}"
     outputs:
       test-unit: ${{ steps.get-projects-arrays.outputs.test-unit }}
       lint: ${{ steps.get-projects-arrays.outputs.lint }}
