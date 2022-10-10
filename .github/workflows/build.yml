@@ -62,7 +62,7 @@ jobs:
       - name: Get affected
         id: get-projects-arrays
         run: |
-            if [[ "${{github.event.pull_request.base.ref}}" != "" ]]; then
+            if [[ "${{github.event.pull_request.base.ref}}" == "" ]]; then
               # Running on origin/release or origin/main branch
               echo "::set-output name=lint::$(node tools/dev-scripts/cmd-print-affected-array.js lint)"
               echo "::set-output name=test-unit::$(node tools/dev-scripts/cmd-print-affected-array.js test)"
