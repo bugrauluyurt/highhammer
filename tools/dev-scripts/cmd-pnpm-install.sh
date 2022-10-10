@@ -9,3 +9,4 @@ wget https://get.pnpm.io/v6.16.js && \
 grep v6.16.js SHASUMS256.txt | sha256sum -c - && \
 cat v6.16.js | node - add --global pnpm && \
 rm SHASUMS256.txt v6.16.js
+

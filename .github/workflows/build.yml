@@ -61,16 +61,17 @@ jobs:
       # Set the affected arrays
       - name: Get affected
         id: get-projects-arrays
-        # When not in a PR and the current branch is main, pass --all flag. Otherwise pass the base branch
         run: |
-            if [[ "${{github.event.pull_request.base.ref}}" == "" && "${{needs.branch-info.outputs.branch-name}}" == "main" ]]; then
-              echo "::set-output name=test-unit::$(node tools/dev-scripts/cmd-print-affected-array.js test --all)"
-              echo "::set-output name=lint::$(node tools/dev-scripts/cmd-print-affected-array.js lint --all)"
+            if [[ "${{github.event.pull_request.base.ref}}" != "" ]]; then
+              # Running on origin/release or origin/main branch
+              echo "::set-output name=lint::$(node tools/dev-scripts/cmd-print-affected-array.js lint)"
+              echo "::set-output name=test-unit::$(node tools/dev-scripts/cmd-print-affected-array.js test)"
+              echo "::set-output name=build::$(node tools/dev-scripts/cmd-print-affected-array.js build)"
             else
+              # Running on PR
               echo "::set-output name=test-unit::$(node tools/dev-scripts/cmd-print-affected-array.js test origin/${{needs.branch-info.outputs.base-branch-name}})"
               echo "::set-output name=lint::$(node tools/dev-scripts/cmd-print-affected-array.js lint origin/${{needs.branch-info.outputs.base-branch-name}})"
             fi
-            echo "::set-output name=build::$(node tools/dev-scripts/cmd-print-affected-array.js build)"
       - name: Print affected
         run: |
           echo "Test-Unit (Affected): ${{steps.get-projects-arrays.outputs.test-unit}}"
