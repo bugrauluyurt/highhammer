@@ -206,5 +206,9 @@ jobs:
           echo "IS_BUILD_REQUIRED=$IS_BUILD_REQUIRED"
           echo "IS_MAIN_OR_RELEASE_BRANCH=$IS_MAIN_OR_RELEASE_BRANCH"
       - name: Dispatch workflow event
-        if: always() && $IS_TAG_STEP_COMPLETED == true && $IS_BUILD_REQUIRED == true && $IS_MAIN_OR_RELEASE_BRANCH == true
+        if: |
+          always() &&
+          ${{ env.IS_TAG_STEP_COMPLETED == 'true' }} &&
+          ${{ env.IS_BUILD_REQUIRED == 'true' }} &&
+          ${{ env.IS_MAIN_OR_RELEASE_BRANCH == 'true' }}
         run: echo "Dispatching deploy event..."
