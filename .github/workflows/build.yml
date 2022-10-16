@@ -8,8 +8,10 @@ on:
       - release
   # Execute it on opening any pull request to main or release
   pull_request:
+
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
 
 jobs:
   # Get branch info
