@@ -89,7 +89,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [get-affected]
     # Skip the job if there are not affected projects containing lint
-    if:  ${{ fromJson(needs.get-affected.outputs.lint)[0] }}
+    if: ${{ fromJson(needs.get-affected.outputs.lint)[0] }}
     strategy:
       # Run in parallel
       max-parallel: 4
@@ -192,23 +192,7 @@ jobs:
   dispatch-deploy:
     runs-on: ubuntu-latest
     needs: [branch-info, get-affected, build-finished, tag]
-    # Only dispatch deploy if:
-    # - Any project build is affected by the latest changes.
-    # - The branch is main or release.
-    env:
-      IS_TAG_STEP_COMPLETED: (needs.tag.result == 'success' || needs.tag.result == 'skipped')
-      IS_BUILD_REQUIRED: ${{ fromJson(needs.get-affected.outputs.build)[0] }}
-      IS_MAIN_OR_RELEASE_BRANCH: (needs.branch-info.outputs.current-branch == 'main') || (needs.branch-info.outputs.current-branch == 'release')
+    if: always() && ${{ fromJson(needs.get-affected.outputs.build)[0] }} && (needs.tag.result == 'success' || needs.tag.result == 'skipped')
     steps:
-      - name: Print requirements
-        run: |
-          echo "IS_TAG_STEP_COMPLETED=$IS_TAG_STEP_COMPLETED"
-          echo "IS_BUILD_REQUIRED=$IS_BUILD_REQUIRED"
-          echo "IS_MAIN_OR_RELEASE_BRANCH=$IS_MAIN_OR_RELEASE_BRANCH"
       - name: Dispatch workflow event
-        if: |
-          always() &&
-          ${{ env.IS_TAG_STEP_COMPLETED == 'true' }} &&
-          ${{ env.IS_BUILD_REQUIRED == 'true' }} &&
-          ${{ env.IS_MAIN_OR_RELEASE_BRANCH == 'true' }}
         run: echo "Dispatching deploy event..."
