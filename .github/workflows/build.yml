@@ -165,7 +165,7 @@ jobs:
     if: |
       always() &&
       (github.event.pull_request.base.ref == '') &&
-      (needs.branch-info.outputs.branch-name == 'main') &&
+      (needs.branch-info.outputs.branch-name == 'main')
     steps:
       # Check out the repository
       - uses: actions/checkout@v3
@@ -195,7 +195,7 @@ jobs:
     # - The branch is main or release.
     if: |
       always() &&
-      (needs.tag.result == 'success' || needs.tag.result == 'skipped')
+      (needs.tag.result == 'success' || needs.tag.result == 'skipped') &&
       fromJson(needs.get-affected.outputs.build)[0] &&
       (github.event.pull_request.base.ref == '') &&
       contains(fromJson('["main", "release"]'), needs.branch-info.outputs.branch-name)
