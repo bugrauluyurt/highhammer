@@ -121,7 +121,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [get-affected]
     # Skip the job if there are not affected projects containing unit tests
-    if:  ${{ fromJson(needs.get-affected.outputs.test-unit)[0] }}
+    if: ${{ fromJson(needs.get-affected.outputs.test-unit)[0] }}
     strategy:
       # Run in parallel
       max-parallel: 4
@@ -162,7 +162,8 @@ jobs:
   tag:
     runs-on: ubuntu-latest
     needs: [build-finished, branch-info]
-    if: always() &&
+    if: |
+      always() &&
       (github.event.pull_request.base.ref == '') &&
       (needs.branch-info.outputs.branch-name == 'main') &&
     steps:
@@ -192,7 +193,8 @@ jobs:
     # Only dispatch deploy if:
     # - Any project build is affected by the latest changes.
     # - The branch is main or release.
-    if: always() &&
+    if: |
+      always() &&
       (needs.tag.result == 'success' || needs.tag.result == 'skipped')
       fromJson(needs.get-affected.outputs.build)[0] &&
       (github.event.pull_request.base.ref == '') &&
