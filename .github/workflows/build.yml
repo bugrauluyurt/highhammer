@@ -8,6 +8,10 @@ on:
       - release
   # Execute it on opening any pull request
   pull_request:
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
 jobs:
   # Get branch info
   branch-info:
@@ -80,6 +84,7 @@ jobs:
     outputs:
       test-unit: ${{ steps.get-projects-arrays.outputs.test-unit }}
       lint: ${{ steps.get-projects-arrays.outputs.lint }}
+      build: ${{ steps.get-projects-arrays.outputs.build }}
   lint:
     runs-on: ubuntu-latest
     needs: [get-affected]
@@ -154,3 +159,43 @@ jobs:
     steps:
       - name: Trace
         run: echo "All jobs finished"
+  tag:
+    runs-on: ubuntu-latest
+    needs: [build-finished, branch-info]
+    if: always() &&
+      ("${{github.event.pull_request.base.ref}}" == "") &&
+      ("${{needs.branch-info.outputs.branch-name}}" == "main")
+    steps:
+      # Check out the repository
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Install Pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.2
+        with:
+          version: "7.x"
+      # Install Node.js
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.17.0"
+          cache: 'pnpm'
+      # Install dev-dependencies only
+      - name: Install dev dependencies
+        run: pnpm install --dev
+      - name: Trigger semantic-release
+        run: pnpm semantic-release
+  dispatch-deploy:
+    runs-on: ubuntu-latest
+    needs: [branch-info, get-affected, build-finished]
+    # Only dispatch deploy if:
+    # - Any project build is affected by the latest changes.
+    # - The branch is main or release.
+    if: always() &&
+      (${{ fromJson(needs.get-affected.outputs.build)[0] }}) &&
+      ("${{github.event.pull_request.base.ref}}" == "") &&
+      contains(fromJson('["main", "release"]'), needs.branch-info.outputs.branch-name)
+    steps:
+      - name: Dispatch workflow event
+        run: echo "Dispatching deploy event..."
