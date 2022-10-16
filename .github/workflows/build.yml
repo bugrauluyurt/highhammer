@@ -192,7 +192,15 @@ jobs:
   dispatch-deploy:
     runs-on: ubuntu-latest
     needs: [branch-info, get-affected, build-finished, tag]
-    if: always() && ${{ fromJson(needs.get-affected.outputs.build)[0] }} && (needs.tag.result == 'success' || needs.tag.result == 'skipped')
+    # Only dispatch deploy if:
+    # - Any project build is affected by the latest changes.
+    # - The branch is main or release.
+    if: |
+      always() &&
+      (needs.tag.result == 'success' || needs.tag.result == 'skipped') &&
+      fromJson(needs.get-affected.outputs.build)[0] &&
+      (github.event.pull_request.base.ref == '') &&
+      contains(fromJson('["main", "release"]'), needs.branch-info.outputs.current-branch)
     steps:
       - name: Dispatch workflow event
         run: echo "Dispatching deploy event..."
