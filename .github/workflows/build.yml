@@ -152,7 +152,7 @@ jobs:
     needs: [test-unit, lint, get-affected]
     if: |
       always() &&
-      (needs.get-affected.result == 'success')
+      (needs.get-affected.result == 'success') &&
       (needs.test-unit.result == 'success' || needs.test-unit.result == 'skipped') &&
       (needs.lint.result == 'success' || needs.lint.result == 'skipped')
     steps:
@@ -163,6 +163,7 @@ jobs:
     needs: [build-finished, branch-info]
     if: |
       always() &&
+      (needs.build-finished.result == 'success') &&
       (github.event.pull_request.base.ref == '') &&
       (needs.branch-info.outputs.current-branch == 'main')
     steps:
