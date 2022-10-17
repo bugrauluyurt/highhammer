@@ -195,12 +195,23 @@ jobs:
     # Only dispatch deploy if:
     # - Any project build is affected by the latest changes.
     # - The branch is main or release.
-    if: |
-      always() &&
-      (needs.tag.result == 'success' || needs.tag.result == 'skipped') &&
-      fromJson(needs.get-affected.outputs.build)[0] &&
-      (github.event.pull_request.base.ref == '') &&
-      contains(fromJson('["main", "release"]'), needs.branch-info.outputs.current-branch)
+    env:
+      IS_TAG_STEP_COMPLETED: (${{needs.tag.result}} == 'success' || ${{needs.tag.result}} == 'skipped')
+      IS_BUILD_REQUIRED: ${{fromJson(needs.get-affected.outputs.build)[0]}}
+      IS_PR: ${{github.event.pull_request.base.ref}} == ''
+      IS_MAIN_OR_RELEASE: ${{contains(fromJson('["main", "release"]'), needs.branch-info.outputs.current-branch)}}
     steps:
+      - name: Print dispatch variables
+        run: |
+          echo "IS_TAG_STEP_COMPLETED=$IS_TAG_STEP_COMPLETED"
+          echo "IS_BUILD_REQUIRED=$IS_BUILD_REQUIRED"
+          echo "IS_PR=$IS_PR"
+          echo "IS_MAIN_OR_RELEASE=$IS_MAIN_OR_RELEASE"
       - name: Dispatch workflow event
+        if: |
+          always() &&
+          (needs.tag.result == 'success' || needs.tag.result == 'skipped') &&
+          fromJson(needs.get-affected.outputs.build)[0] &&
+          (github.event.pull_request.base.ref == '') &&
+          contains(fromJson('["main", "release"]'), needs.branch-info.outputs.current-branch)
         run: echo "Dispatching deploy event..."
