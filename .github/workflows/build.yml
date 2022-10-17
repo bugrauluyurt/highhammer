@@ -205,7 +205,7 @@ jobs:
       (github.event.pull_request.base.ref == '') &&
       contains(fromJson('["main", "release"]'), needs.branch-info.outputs.branch-name)
     env:
-      BUILD_REQUIRED_APPS: needs.get-affected.outputs.build
+      BUILD_REQUIRED_APPS: ${{needs.get-affected.outputs.build}}
       BRANCH_NAME: ${{needs.branch-info.outputs.branch-name}}
       IS_MAIN_OR_RELEASE: ${{contains(fromJson('["main", "release"]'), needs.branch-info.outputs.branch-name)}}
     steps:
