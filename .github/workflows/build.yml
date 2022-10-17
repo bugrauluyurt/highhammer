@@ -77,6 +77,7 @@ jobs:
               # Running on PR
               echo "test-unit=$(node tools/dev-scripts/cmd-print-affected-array.js test origin/${{needs.branch-info.outputs.base-branch-name}})" >> $GITHUB_OUTPUT
               echo "lint=$(node tools/dev-scripts/cmd-print-affected-array.js lint origin/${{needs.branch-info.outputs.base-branch-name}})" >> $GITHUB_OUTPUT
+              echo "build=[]" >> $GITHUB_OUTPUT
             fi
       - name: Print affected
         run: |
