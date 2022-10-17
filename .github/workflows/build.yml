@@ -204,18 +204,14 @@ jobs:
       (github.event.pull_request.base.ref == '') &&
       contains(fromJson('["main", "release"]'), needs.branch-info.outputs.branch-name)
     env:
-      BUILD_REQUIRED_APPS: fromJson(needs.get-affected.outputs.build)[0]
-      BRANCH_NAME: needs.branch-info.outputs.branch-name
-      IS_TAG_STEP_COMPLETED: (needs.tag.result == 'success' || needs.tag.result == 'skipped')
-      IS_PR: github.event.pull_request.base.ref == ''
+      BUILD_REQUIRED_APPS: ${{fromJson(needs.get-affected.outputs.build)[0]}}
+      BRANCH_NAME: ${{needs.branch-info.outputs.branch-name}}
       IS_MAIN_OR_RELEASE: ${{contains(fromJson('["main", "release"]'), needs.branch-info.outputs.branch-name)}}
     steps:
       - name: Print deploy variables
         run: |
           echo "BUILD_REQUIRED_APPS=$BUILD_REQUIRED_APPS"
           echo "BRANCH_NAME=$BRANCH_NAME"
-          echo "IS_TAG_STEP_COMPLETED=$IS_TAG_STEP_COMPLETED"
-          echo "IS_PR=$IS_PR"
           echo "IS_MAIN_OR_RELEASE=$IS_MAIN_OR_RELEASE"
       - name: Dispatch workflow event
         run: echo "Dispatching deploy event..."
