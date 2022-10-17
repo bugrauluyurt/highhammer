@@ -77,6 +77,7 @@ jobs:
               # Running on PR
               echo "test-unit=$(node tools/dev-scripts/cmd-print-affected-array.js test origin/${{needs.branch-info.outputs.base-branch-name}})" >> $GITHUB_OUTPUT
               echo "lint=$(node tools/dev-scripts/cmd-print-affected-array.js lint origin/${{needs.branch-info.outputs.base-branch-name}})" >> $GITHUB_OUTPUT
+              echo "build=[]" >> $GITHUB_OUTPUT
             fi
       - name: Print affected
         run: |
@@ -204,16 +205,14 @@ jobs:
       (github.event.pull_request.base.ref == '') &&
       contains(fromJson('["main", "release"]'), needs.branch-info.outputs.branch-name)
     env:
-      IS_TAG_STEP_COMPLETED: (${{needs.tag.result}} == 'success' || ${{needs.tag.result}} == 'skipped')
-      IS_BUILD_REQUIRED: ${{fromJson(needs.get-affected.outputs.build)[0]}}
-      IS_PR: ${{github.event.pull_request.base.ref}} == ''
+      BUILD_REQUIRED_APPS: ${{fromJson(needs.get-affected.outputs.build)[0]}}
+      BRANCH_NAME: ${{needs.branch-info.outputs.branch-name}}
       IS_MAIN_OR_RELEASE: ${{contains(fromJson('["main", "release"]'), needs.branch-info.outputs.branch-name)}}
     steps:
-      - name: Print dispatch variables
+      - name: Print deploy variables
         run: |
-          echo "IS_TAG_STEP_COMPLETED=$IS_TAG_STEP_COMPLETED"
-          echo "IS_BUILD_REQUIRED=$IS_BUILD_REQUIRED"
-          echo "IS_PR=$IS_PR"
+          echo "BUILD_REQUIRED_APPS=$BUILD_REQUIRED_APPS"
+          echo "BRANCH_NAME=$BRANCH_NAME"
           echo "IS_MAIN_OR_RELEASE=$IS_MAIN_OR_RELEASE"
       - name: Dispatch workflow event
         run: echo "Dispatching deploy event..."
