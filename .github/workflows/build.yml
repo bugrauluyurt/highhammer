@@ -21,19 +21,20 @@ jobs:
       # Get current branch name
       - name: Get branch name
         id: branch-name
-        uses: tj-actions/branch-names@v6.2
+        uses: tj-actions/branch-names@v6
+      # Get base branch name to compare with. Base branch on a PR, "main" branch on pushing.
       - name: Get base branch name
         id: get-base-branch-name
         run: |
             if [[ "${{github.event.pull_request.base.ref}}" != "" ]]; then
-              echo "base-branch=${{github.event.pull_request.base.ref}}" >> $GITHUB_OUTPUT
+              echo "branch=${{github.event.pull_request.base.ref}}" >> $GITHUB_OUTPUT
             else
-              echo "base-branch=${{steps.branch-name.outputs.current_branch}}" >> $GITHUB_OUTPUT
+              echo "branch=main" >> $GITHUB_OUTPUT
             fi
     outputs:
       # Export the branch names as output to be able to use it in other jobs
-      base-branch: ${{ steps.get-base-branch-name.outputs.base-branch }}
-      current-branch: ${{ steps.branch-name.outputs.current_branch }}
+      base-branch-name: ${{ steps.get-base-branch-name.outputs.branch }}
+      branch-name: ${{ steps.branch-name.outputs.current_branch }}
   get-affected:
     needs: [branch-info]
     runs-on: ubuntu-latest
@@ -61,20 +62,21 @@ jobs:
         id: set-shas
         uses: nrwl/nx-set-shas@v3
         with:
-          main-branch-name: ${{needs.branch-info.outputs.base-branch}}
+          main-branch-name: ${{needs.branch-info.outputs.base-branch-name}}
       # Set the affected arrays
       - name: Get affected
         id: get-projects-arrays
+        # main and release branches will all the tests once workflow is run
         run: |
             if [[ "${{github.event.pull_request.base.ref}}" == "" ]]; then
               # Running on origin/release or origin/main branch
-              echo "lint=$(node tools/dev-scripts/cmd-print-affected-array.js lint)" >> $GITHUB_OUTPUT
-              echo "test-unit=$(node tools/dev-scripts/cmd-print-affected-array.js test-unit)" >> $GITHUB_OUTPUT
-              echo "build=$(node tools/dev-scripts/cmd-print-affected-array.js build)" >> $GITHUB_OUTPUT
+              echo "lint=$(node tools/dev-scripts/cmd-print-affected-array.js lint --all)" >> $GITHUB_OUTPUT
+              echo "test-unit=$(node tools/dev-scripts/cmd-print-affected-array.js test-unit --all)" >> $GITHUB_OUTPUT
+              echo "build=$(node tools/dev-scripts/cmd-print-affected-array.js build --all)" >> $GITHUB_OUTPUT
             else
               # Running on PR
-              echo "test-unit=$(node tools/dev-scripts/cmd-print-affected-array.js test origin/${{needs.branch-info.outputs.base-branch}})" >> $GITHUB_OUTPUT
-              echo "lint=$(node tools/dev-scripts/cmd-print-affected-array.js lint origin/${{needs.branch-info.outputs.base-branch}})" >> $GITHUB_OUTPUT
+              echo "test-unit=$(node tools/dev-scripts/cmd-print-affected-array.js test origin/${{needs.branch-info.outputs.base-branch-name}})" >> $GITHUB_OUTPUT
+              echo "lint=$(node tools/dev-scripts/cmd-print-affected-array.js lint origin/${{needs.branch-info.outputs.base-branch-name}})" >> $GITHUB_OUTPUT
             fi
       - name: Print affected
         run: |
@@ -167,7 +169,7 @@ jobs:
       always() &&
       (needs.build-finished.result == 'success') &&
       (github.event.pull_request.base.ref == '') &&
-      (needs.branch-info.outputs.current-branch == 'main')
+      (needs.branch-info.outputs.branch-name == 'main')
     steps:
       # Check out the repository
       - uses: actions/checkout@v3
@@ -199,7 +201,7 @@ jobs:
       IS_TAG_STEP_COMPLETED: (${{needs.tag.result}} == 'success' || ${{needs.tag.result}} == 'skipped')
       IS_BUILD_REQUIRED: ${{fromJson(needs.get-affected.outputs.build)[0]}}
       IS_PR: ${{github.event.pull_request.base.ref}} == ''
-      IS_MAIN_OR_RELEASE: ${{contains(fromJson('["main", "release"]'), needs.branch-info.outputs.current-branch)}}
+      IS_MAIN_OR_RELEASE: ${{contains(fromJson('["main", "release"]'), needs.branch-info.outputs.branch-name)}}
     steps:
       - name: Print dispatch variables
         run: |
@@ -213,5 +215,5 @@ jobs:
           (needs.tag.result == 'success' || needs.tag.result == 'skipped') &&
           fromJson(needs.get-affected.outputs.build)[0] &&
           (github.event.pull_request.base.ref == '') &&
-          contains(fromJson('["main", "release"]'), needs.branch-info.outputs.current-branch)
+          contains(fromJson('["main", "release"]'), needs.branch-info.outputs.branch-name)
         run: echo "Dispatching deploy event..."
