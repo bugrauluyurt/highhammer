@@ -3,9 +3,6 @@ name: pre-deploy
 on:
   workflow_dispatch:
     inputs:
-      branch:
-        description: 'Branch'
-        required: true
       # Sha: Git sha. If not provided the system will default to the HEAD of the branch
       sha:
         description: 'SHA'
@@ -25,7 +22,7 @@ jobs:
           echo "SHA: $SHA"
           echo "APPS: $APPS"
         env:
-          BRANCH: ${{ inputs.branch }}
+          BRANCH: ${{ github.head_ref || github.ref_name }}
           SHA: ${{ inputs.sha }}
           APPS: ${{ inputs.apps }}
     # If the branch is

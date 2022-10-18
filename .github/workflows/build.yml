@@ -221,4 +221,4 @@ jobs:
       - name: Dispatch workflow event
         run: |
           echo "Dispatching deploy event..."
-          gh workflow run pre-deploy.yml -f branch=$BRANCH_NAME -f apps=$BUILD_REQUIRED_APPS sha=${{ steps.set-version.outputs.sha }}
+          gh workflow run pre-deploy.yml -f apps=$BUILD_REQUIRED_APPS -f sha=${{steps.set-version.outputs.sha}}
