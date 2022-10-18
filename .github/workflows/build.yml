@@ -210,15 +210,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Set sha
-        id: set-sha
-        run: echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
+      - name: Set version
+        id: set-version
+        run: echo "sha=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_OUTPUT
       - name: Print deploy variables
         run: |
           echo "BRANCH_NAME=$BRANCH_NAME"
           echo "BUILD_REQUIRED_APPS=$BUILD_REQUIRED_APPS"
-          echo "SHA=${{steps.get-sha.outputs.sha}}"
+          echo "SHA=${{steps.set-version.outputs.sha}}"
       - name: Dispatch workflow event
         run: |
           echo "Dispatching deploy event..."
-          gh workflow run pre-deploy.yml -f branch=$BRANCH_NAME -f apps=$BUILD_REQUIRED_APPS sha=${{steps.set-sha.outputs.sha}}
+          gh workflow run pre-deploy.yml -f branch=$BRANCH_NAME -f apps=$BUILD_REQUIRED_APPS sha=${{ steps.set-version.outputs.sha }}
