@@ -1,0 +1,33 @@
+name: pre-deploy
+
+on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch'
+        required: true
+      # Sha: Git sha. If not provided the system will default to the HEAD of the branch
+      sha:
+        description: 'SHA'
+        required: false
+      # Apps: Array of build required apps. Ex: ['client-app', 'api-core']. Empty array creates images for all services.
+      apps:
+        description: 'Apps'
+        default: '[]'
+
+jobs:
+  log-the-inputs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Log Inputs
+        run: |
+          echo "BRANCH: $BRANCH"
+          echo "SHA: $SHA"
+          echo "APPS: $APPS"
+        env:
+          BRANCH: ${{ inputs.branch }}
+          SHA: ${{ inputs.sha }}
+          APPS: ${{ inputs.apps }}
+    # If the branch is
+    # main: Trigger a deployment flow for the affected apps on Azure Pipelines. Require approval for deployment. Deployment can only be to QA or PROD from here
+    # release OR *: Apply the k8 template for the affected app directly to DEV.
