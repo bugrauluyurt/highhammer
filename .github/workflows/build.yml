@@ -27,12 +27,7 @@ jobs:
         id: generate-inputs
         run: |
           # INPUT -> Apps
-          if [[ "${{inputs.apps}}" == "[]" ]]; then
-            # Get all apps from the workspace and set it as affected-apps
-            echo "apps=$(node tools/dev-scripts/cmd-get-workspace-projects.js)" >> $GITHUB_OUTPUT
-          else
-            echo "apps=${{ inputs.apps }}" >> $GITHUB_OUTPUT
-          fi
+          echo "apps=$(node tools/dev-scripts/cmd-get-build-projects.js) ${{inputs.apps}}" >> $GITHUB_OUTPUT
 
           # INPUT - Sha
           if [[ "${{inputs.sha}}" == "" ]]; then
