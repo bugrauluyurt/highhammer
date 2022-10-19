@@ -5,28 +5,15 @@ on:
     inputs:
       # Sha: Git sha. If not provided the system will default to the HEAD of the branch
       sha:
-        description: 'SHA'
+        description: 'Sha'
         required: false
-      # Apps: Array of build required apps. Ex: ['client-app', 'api-core']. Empty array creates images for all services.
       apps:
-        description: 'Apps'
+        description: 'Apps: (Write a list of apps to build. Ex: ["client-app", "api-core"]). Empty array creates images for all services.'
         default: '[]'
         required: false
 
 jobs:
-  print-inputs:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print inputs
-        run: |
-          echo "BRANCH: $BRANCH"
-          echo "SHA: $SHA"
-          echo "APPS: $APPS"
-        env:
-          BRANCH: ${{ github.head_ref || github.ref_name }}
-          SHA: ${{ inputs.sha }}
-          APPS: ${{ inputs.apps }}
-  get-inputs:
+  set-inputs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -56,10 +43,15 @@ jobs:
 
           # INPUT - Branch
           echo "branch=${{ github.head_ref || github.ref_name }}" >> $GITHUB_OUTPUT
+      - name: Print inputs
+        run: |
+          echo "APPS: ${{ steps.set-inputs.outputs.apps }}"
+          echo "SHA: ${{ steps.set-inputs.outputs.sha }}"
+          echo "BRANCH: ${{ steps.set-inputs.outputs.branch }}"
     outputs:
-      apps: ${{ steps.get-inputs.outputs.apps }}
-      sha: ${{ steps.get-inputs.outputs.sha }}
-      branch: ${{ steps.get-inputs.outputs.branch }}
+      apps: ${{ steps.set-inputs.outputs.apps }}
+      sha: ${{ steps.set-inputs.outputs.sha }}
+      branch: ${{ steps.set-inputs.outputs.branch }}
   build:
     runs-on: ubuntu-latest
     needs: [get-inputs]
