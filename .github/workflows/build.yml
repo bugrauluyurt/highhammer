@@ -23,8 +23,8 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: "16.17.0"
-      - name: Set inputs
-        id: set-inputs
+      - name: Generate inputs
+        id: generate-inputs
         run: |
           # INPUT -> Apps
           if [[ "${{inputs.apps}}" == "[]" ]]; then
@@ -45,13 +45,13 @@ jobs:
           echo "branch=${{ github.head_ref || github.ref_name }}" >> $GITHUB_OUTPUT
       - name: Print inputs
         run: |
-          echo "APPS: ${{ steps.set-inputs.outputs.apps }}"
-          echo "SHA: ${{ steps.set-inputs.outputs.sha }}"
-          echo "BRANCH: ${{ steps.set-inputs.outputs.branch }}"
+          echo "APPS: ${{ steps.generate-inputs.outputs.apps }}"
+          echo "SHA: ${{ steps.generate-inputs.outputs.sha }}"
+          echo "BRANCH: ${{ steps.generate-inputs.outputs.branch }}"
     outputs:
-      apps: ${{ steps.set-inputs.outputs.apps }}
-      sha: ${{ steps.set-inputs.outputs.sha }}
-      branch: ${{ steps.set-inputs.outputs.branch }}
+      apps: ${{ steps.generate-inputs.outputs.apps }}
+      sha: ${{ steps.generate-inputs.outputs.sha }}
+      branch: ${{ steps.generate-inputs.outputs.branch }}
   build:
     runs-on: ubuntu-latest
     needs: [set-inputs]
