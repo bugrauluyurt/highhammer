@@ -1,0 +1,224 @@
+name: pre-build
+# Events configuration
+on:
+  # Execute it on pushing to next branches
+  push:
+    branches:
+      - main
+      - release
+  # Execute it on opening any pull request to main or release
+  pull_request:
+
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+
+jobs:
+  # Get branch info
+  branch-info:
+    runs-on: ubuntu-latest
+    steps:
+      # Get current branch name
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v6
+      # Get base branch name to compare with. Base branch on a PR, "main" branch on pushing.
+      - name: Get base branch name
+        id: get-base-branch-name
+        run: |
+            if [[ "${{github.event.pull_request.base.ref}}" != "" ]]; then
+              echo "branch=${{github.event.pull_request.base.ref}}" >> $GITHUB_OUTPUT
+            else
+              echo "branch=main" >> $GITHUB_OUTPUT
+            fi
+    outputs:
+      # Export the branch names as output to be able to use it in other jobs
+      base-branch-name: ${{ steps.get-base-branch-name.outputs.branch }}
+      branch-name: ${{ steps.branch-name.outputs.current_branch }}
+  get-affected:
+    needs: [branch-info]
+    runs-on: ubuntu-latest
+    steps:
+      # Check out the repository
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Install Pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: "7.x"
+      # Install Node.js
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.17.0"
+          cache: 'pnpm'
+      # Install workspace dependencies
+      - name: Install dependencies
+        run: pnpm install
+      # Configure Nx to be able to detect changes between branches when we are in a PR
+      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+        id: set-shas
+        uses: nrwl/nx-set-shas@v3
+        with:
+          main-branch-name: ${{needs.branch-info.outputs.base-branch-name}}
+      # Set the affected arrays
+      - name: Get affected
+        id: get-projects-arrays
+        # main and release branches will all the tests once workflow is run
+        run: |
+            if [[ "${{github.event.pull_request.base.ref}}" == "" ]]; then
+              # Running on origin/release or origin/main branch
+              echo "lint=$(node tools/dev-scripts/cmd-print-affected-array.js lint --all)" >> $GITHUB_OUTPUT
+              echo "test-unit=$(node tools/dev-scripts/cmd-print-affected-array.js test-unit --all)" >> $GITHUB_OUTPUT
+              echo "build=$(node tools/dev-scripts/cmd-print-affected-array.js build --all)" >> $GITHUB_OUTPUT
+            else
+              # Running on PR
+              echo "test-unit=$(node tools/dev-scripts/cmd-print-affected-array.js test origin/${{needs.branch-info.outputs.base-branch-name}})" >> $GITHUB_OUTPUT
+              echo "lint=$(node tools/dev-scripts/cmd-print-affected-array.js lint origin/${{needs.branch-info.outputs.base-branch-name}})" >> $GITHUB_OUTPUT
+              echo "build=[]" >> $GITHUB_OUTPUT
+            fi
+      - name: Print affected
+        run: |
+          echo "Test-Unit (Affected): ${{steps.get-projects-arrays.outputs.test-unit}}"
+          echo "Lint (Affected): ${{steps.get-projects-arrays.outputs.lint}}"
+          echo "Build (Affected): ${{steps.get-projects-arrays.outputs.build}}"
+    outputs:
+      test-unit: ${{ steps.get-projects-arrays.outputs.test-unit }}
+      lint: ${{ steps.get-projects-arrays.outputs.lint }}
+      build: ${{ steps.get-projects-arrays.outputs.build }}
+  lint:
+    runs-on: ubuntu-latest
+    needs: [get-affected]
+    # Skip the job if there are not affected projects containing lint
+    if: ${{ fromJson(needs.get-affected.outputs.lint)[0] }}
+    strategy:
+      # Run in parallel
+      max-parallel: 4
+      # One job for each different project and node version
+      matrix:
+        node: ["16.17.0"]
+        projectName: ${{fromJson(needs.get-affected.outputs.lint)}}
+    env:
+      NODE: ${{ matrix.node }}
+    steps:
+      # Checkout and setup environment
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: "7.x"
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      # Run test:unit script in the affected project
+      - name: Lint
+        run: pnpm nx run ${{ matrix.projectName }}:lint
+  test-unit:
+    runs-on: ubuntu-latest
+    needs: [get-affected]
+    # Skip the job if there are not affected projects containing unit tests
+    if: ${{ fromJson(needs.get-affected.outputs.test-unit)[0] }}
+    strategy:
+      # Run in parallel
+      max-parallel: 4
+      # One job for each different project and node version
+      matrix:
+        node: ["16.17.0"]
+        projectName: ${{fromJson(needs.get-affected.outputs.test-unit)}}
+    env:
+      NODE: ${{ matrix.node }}
+    steps:
+      # Checkout and setup environment
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: "7.x"
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node }}
+          cache: 'pnpm'
+      - name: Install dependencies
+        run: pnpm install
+      # Run test:unit script in the affected project
+      - name: Test unit
+        run: pnpm nx run ${{ matrix.projectName }}:test
+  pre-build-finished:
+    runs-on: ubuntu-latest
+    needs: [test-unit, lint, get-affected]
+    if: |
+      always() &&
+      (needs.get-affected.result == 'success') &&
+      (needs.test-unit.result == 'success' || needs.test-unit.result == 'skipped') &&
+      (needs.lint.result == 'success' || needs.lint.result == 'skipped')
+    steps:
+      - name: Trace
+        run: echo "All jobs finished"
+  tag:
+    runs-on: ubuntu-latest
+    needs: [pre-build-finished, branch-info]
+    if: |
+      always() &&
+      (needs.pre-build-finished.result == 'success') &&
+      (github.event.pull_request.base.ref == '') &&
+      (needs.branch-info.outputs.branch-name == 'main')
+    steps:
+      # Check out the repository
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      # Install Pnpm
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2.2.4
+        with:
+          version: "7.x"
+      # Install Node.js
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.17.0"
+          cache: 'pnpm'
+      # Install dev-dependencies only
+      - name: Install dev dependencies
+        run: pnpm install --dev
+      - name: Trigger semantic-release
+        run: pnpm semantic-release
+  dispatch-build:
+    runs-on: ubuntu-latest
+    needs: [branch-info, get-affected, pre-build-finished, tag]
+    # Only dispatch pre-deploy if:
+    # - Any project build is affected by the latest changes.
+    # - The branch is main or release.
+    if: |
+      always() &&
+      (needs.tag.result == 'success' || needs.tag.result == 'skipped') &&
+      fromJson(needs.get-affected.outputs.build)[0] &&
+      (github.event.pull_request.base.ref == '') &&
+      contains(fromJson('["main", "release"]'), needs.branch-info.outputs.branch-name)
+    env:
+      BUILD_REQUIRED_APPS: ${{needs.get-affected.outputs.build}}
+      BRANCH_NAME: ${{needs.branch-info.outputs.branch-name}}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set version
+        id: set-version
+        run: echo "sha=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_OUTPUT
+      - name: Print deploy variables
+        run: |
+          echo "BRANCH_NAME=$BRANCH_NAME"
+          echo "BUILD_REQUIRED_APPS=$BUILD_REQUIRED_APPS"
+          echo "SHA=${{steps.set-version.outputs.sha}}"
+      - name: Dispatch build
+        run: |
+          echo "Dispatching build event..."
+          gh workflow run build.yml -f apps=$BUILD_REQUIRED_APPS -f sha=${{steps.set-version.outputs.sha}}
