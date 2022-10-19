@@ -17,7 +17,7 @@ const getWorkSpaceProjects = () => {
 
 const run = () => {
   try {
-    getWorkSpaceProjects()
+    console.log(getWorkSpaceProjects())
     process.exit(0);
   } catch (e) {
     console.error(e);
