@@ -38,9 +38,6 @@ jobs:
             echo "sha=${{ inputs.sha }}" >> $GITHUB_OUTPUT
           fi
 
-          # INPUT - tag
-          # echo "tag=$(git tag --points-at <commit-id>)" >> $GITHUB_OUTPUT
-
           # INPUT - Branch
           echo "branch=${{ github.head_ref || github.ref_name }}" >> $GITHUB_OUTPUT
       - name: Print inputs
@@ -48,11 +45,9 @@ jobs:
           echo "APPS: ${{ steps.generate-inputs.outputs.apps }}"
           echo "SHA: ${{ steps.generate-inputs.outputs.sha }}"
           echo "BRANCH: ${{ steps.generate-inputs.outputs.branch }}"
-          # echo "TAG: ${{ steps.generate-inputs.outputs.tag }}"
     outputs:
       apps: ${{ steps.generate-inputs.outputs.apps }}
       sha: ${{ steps.generate-inputs.outputs.sha }}
-      tag: ${{ steps.generate-inputs.outputs.tag }}
       branch: ${{ steps.generate-inputs.outputs.branch }}
   build:
     runs-on: ubuntu-latest
@@ -89,6 +84,9 @@ jobs:
       - name: Package
         run: |
           TAG="$(git tag --points-at ${{needs.set-inputs.outputs.sha}})"
+          if [[ $TAG == "" ]]; then
+            TAG="${{needs.set-inputs.outputs.sha}}"
+          fi
 
           # Only docker build for Client-App for testing purposes
 
