@@ -79,7 +79,7 @@ jobs:
         run: pnpm install
       - name: Build
         run: |
-          git checkout ${{needs.set-inputs.outputs.sha}}"
+          git checkout ${{needs.set-inputs.outputs.sha}}
           pnpm nx run ${{ matrix.projectName }}:build
       - name: Package
         run: |
