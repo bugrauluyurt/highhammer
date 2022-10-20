@@ -12,6 +12,10 @@ on:
         default: '[]'
         required: false
 
+env:
+  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+
 jobs:
   set-inputs:
     runs-on: ubuntu-latest
@@ -34,6 +38,9 @@ jobs:
             echo "sha=${{ inputs.sha }}" >> $GITHUB_OUTPUT
           fi
 
+          # INPUT - tag
+          # echo "tag=$(git tag --points-at <commit-id>)" >> $GITHUB_OUTPUT
+
           # INPUT - Branch
           echo "branch=${{ github.head_ref || github.ref_name }}" >> $GITHUB_OUTPUT
       - name: Print inputs
@@ -41,9 +48,11 @@ jobs:
           echo "APPS: ${{ steps.generate-inputs.outputs.apps }}"
           echo "SHA: ${{ steps.generate-inputs.outputs.sha }}"
           echo "BRANCH: ${{ steps.generate-inputs.outputs.branch }}"
+          # echo "TAG: ${{ steps.generate-inputs.outputs.tag }}"
     outputs:
       apps: ${{ steps.generate-inputs.outputs.apps }}
       sha: ${{ steps.generate-inputs.outputs.sha }}
+      tag: ${{ steps.generate-inputs.outputs.tag }}
       branch: ${{ steps.generate-inputs.outputs.branch }}
   build:
     runs-on: ubuntu-latest
@@ -57,6 +66,9 @@ jobs:
     env:
       NODE: ${{ matrix.node }}
     steps:
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v6
       - name: Checkout
         uses: actions/checkout@v3
         with:
@@ -74,6 +86,14 @@ jobs:
         run: pnpm install
       - name: Build
         run: pnpm nx run ${{ matrix.projectName }}:build
-    # If the branch is
-    # main: Trigger a deployment flow for the affected apps on Azure Pipelines. Require approval for deployment. Deployment can only be to QA or PROD from here
-    # release OR *: Apply the k8 template for the affected app directly to DEV.
+      - name: Package
+        run: |
+          TAG="$(git tag --points-at ${{needs.set-inputs.outputs.sha}})"
+
+          # Only docker build for Client-App for testing purposes
+
+          if [[ "${{matrix.projectName}}" == "client-app" ]]; then
+            cp -r ./dist/apps/${{matrix.projectName}}/ ./apps/${{matrix.projectName}}/dist/
+            docker build -t ${{github.event.repository.name}}/${{matrix.projectName}}:$TAG -f ./apps/${{matrix.projectName}}/Dockerfile ./apps/${{matrix.projectName}}
+            # System should use the ACR docker cache for faster builds
+          fi
