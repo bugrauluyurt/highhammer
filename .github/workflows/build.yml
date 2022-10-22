@@ -31,7 +31,7 @@ jobs:
         id: generate-inputs
         run: |
           # INPUT -> Apps
-          echo "apps=$(node tools/dev-scripts/cmd-get-build-projects.js) ${{inputs.apps}}" >> $GITHUB_OUTPUT
+          echo "apps=$(node tools/dev-scripts/cmd-get-build-projects.js '${{inputs.apps}}')" >> $GITHUB_OUTPUT
 
           # INPUT - Sha
           if [[ "${{inputs.sha}}" == "" ]]; then
@@ -86,9 +86,10 @@ jobs:
       - name: Package
         run: |
           VERSION="$(git tag --points-at ${{needs.set-inputs.outputs.sha}})"
+          TIME="$(date +'%Y%m%d%H%M')"
 
-          if [[ $TAG == "" ]]; then
-            VERSION="${{needs.set-inputs.outputs.sha}}"
+          if [[ $VERSION == "" ]]; then
+            VERSION="$TIME:${{needs.set-inputs.outputs.sha}}"
           fi
 
           rm -rf ./apps/${{matrix.projectName}}/dist

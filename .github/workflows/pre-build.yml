@@ -199,7 +199,7 @@ jobs:
     # - Any project build is affected by the latest changes.
     # - The branch is main or release.
     if: |
-      always() &&
+      (needs.pre-build-finished.result == 'success') &&
       (needs.tag.result == 'success' || needs.tag.result == 'skipped') &&
       fromJson(needs.get-affected.outputs.build)[0] &&
       (github.event.pull_request.base.ref == '') &&
