@@ -1,5 +1,12 @@
-FROM node:16.17.0-alpine
+FROM node:16.17.0-bullseye-slim
+RUN apt-get update && apt-get install -y --no-install-recommends dumb-init
+
+ENV NODE_ENV production
+
 WORKDIR "/app"
-COPY ./dist/ .
+COPY --chown=node:node ./dist/ .
 EXPOSE 3333
-CMD ["node", "main.js"]
+
+USER node
+
+CMD ["dumb-init", "node", "main.js"]

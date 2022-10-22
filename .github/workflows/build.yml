@@ -78,6 +78,7 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: 'pnpm'
       - name: Install dependencies
+        # @INFO: Don't install only prod dependencies. Dev dependencies are needed to use the nx build and cloud.
         run: pnpm install
       - name: Build
         run: |
