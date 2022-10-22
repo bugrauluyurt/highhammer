@@ -21,7 +21,7 @@ const getBuildProjects = () => {
     inputAffectedApps = [];
   }
   const generatedProjects = Object.keys(workSpaceJson.projects).map((projectName) => {
-    if (projectName.includes('e2e')) {
+    if (projectName.includes('e2e') || projectName.includes('api-worker')) {
       return undefined;
     }
     if (!inputAffectedApps.length) {

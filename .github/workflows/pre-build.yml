@@ -203,7 +203,7 @@ jobs:
       (needs.tag.result == 'success' || needs.tag.result == 'skipped') &&
       fromJson(needs.get-affected.outputs.build)[0] &&
       (github.event.pull_request.base.ref == '') &&
-      contains(fromJson('["main", "release"]'), needs.branch-info.outputs.branch-name)
+      contains(fromJson('["main"]'), needs.branch-info.outputs.branch-name)
     env:
       BUILD_REQUIRED_APPS: ${{needs.get-affected.outputs.build}}
       BRANCH_NAME: ${{needs.branch-info.outputs.branch-name}}

@@ -85,15 +85,16 @@ jobs:
           pnpm nx run ${{ matrix.projectName }}:build
       - name: Package
         run: |
-          TAG="$(git tag --points-at ${{needs.set-inputs.outputs.sha}})"
+          VERSION="$(git tag --points-at ${{needs.set-inputs.outputs.sha}})"
+
           if [[ $TAG == "" ]]; then
-            TAG="${{needs.set-inputs.outputs.sha}}"
+            VERSION="${{needs.set-inputs.outputs.sha}}"
           fi
 
-          # Only docker build for Client-App for testing purposes
+          rm -rf ./apps/${{matrix.projectName}}/dist
 
-          if [[ "${{matrix.projectName}}" == "client-app" ]]; then
-            cp -r ./dist/apps/${{matrix.projectName}}/ ./apps/${{matrix.projectName}}/dist/
-            docker build -t ${{github.event.repository.name}}/${{matrix.projectName}}:$TAG -f ./apps/${{matrix.projectName}}/Dockerfile ./apps/${{matrix.projectName}}
-            # System should use the ACR docker cache for faster builds
-          fi
+          # @INFO: For now skip the api-worker build, since it is not being used. Skipping is done inside the 'cmd-get-build-projects.js' script
+          cp -r ./dist/apps/${{matrix.projectName}}/ ./apps/${{matrix.projectName}}/dist/
+
+          # @TODO: System should use the ACR docker cache for faster builds
+          docker build -t ${{github.event.repository.name}}/${{matrix.projectName}}:$VERSION -f ./apps/${{matrix.projectName}}/Dockerfile ./apps/${{matrix.projectName}}
