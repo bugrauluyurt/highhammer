@@ -89,7 +89,7 @@ jobs:
           TIME="$(date +'%Y%m%d%H%M')"
 
           if [[ $VERSION == "" ]]; then
-            VERSION="$TIME:${{needs.set-inputs.outputs.sha}}"
+            VERSION="$TIME-${{needs.set-inputs.outputs.sha}}"
           fi
 
           rm -rf ./apps/${{matrix.projectName}}/dist
