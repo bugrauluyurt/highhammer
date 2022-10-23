@@ -11,9 +11,6 @@ on:
         description: 'Apps: (Write a list of apps to build. Ex: ["client-app", "api-core"]). Empty array creates images for all services.'
         default: '[]'
         required: false
-  push:
-    tags:
-      - 'v*.*.*'
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
