@@ -20,7 +20,8 @@ const getBuildProjects = () => {
   if (!(inputAffectedApps instanceof Array)) {
     inputAffectedApps = [];
   }
-  const generatedProjects = Object.keys(workSpaceJson.projects).map((projectName) => {
+  const allWorkspaceProjects = Object.keys(workSpaceJson.projects)
+  const generatedProjects = allWorkspaceProjects.map((projectName) => {
     if (projectName.includes('e2e') || projectName.includes('api-worker')) {
       return undefined;
     }
@@ -29,7 +30,7 @@ const getBuildProjects = () => {
     }
     return inputAffectedApps.includes(projectName) ? projectName : undefined
   }).filter(Boolean)
-  return JSON.stringify(generatedProjects);
+  return JSON.stringify(generatedProjects.length ? generateProject : allWorkspaceProjects);
 }
 
 const run = () => {

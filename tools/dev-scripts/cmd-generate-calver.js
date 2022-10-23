@@ -61,7 +61,7 @@ const run = () => {
       throw Error('Please input a projectName as a cmd line argument.');
     }
     const nextCalver = generateNextCalver(PROJECT_NAME);
-    console.log(`Next version for project ${PROJECT_NAME} is ${nextCalver}`);
+    console.log(nextCalver);
     process.exit(0);
   } catch (e) {
     console.error(e);
