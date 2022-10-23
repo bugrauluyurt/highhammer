@@ -99,8 +99,8 @@ jobs:
         run: |
           VERSION="$(git tag --points-at ${{needs.set-inputs.outputs.sha}})"
 
-          # If there is no version set the version to the tag ref
-          if [[ $VERSION == "" && ${{github.event_name == 'push'}} == 'true' ]]; then
+          # If there is no version set the version to the tag ref if the event source is push
+          if [[ $VERSION == "" && "${{github.event_name == 'push'}}" == "true" ]]; then
             VERSION="$GITHUB_REF_NAME"
           fi
 
