@@ -18,7 +18,7 @@ const getProjectPackageJson = (projectName) => {
 const bumpProjectVersion = (projectName, nextCalver) => {
   const projectPackageJson = {...getProjectPackageJson(projectName)};
   projectPackageJson.version = nextCalver;
-  fs.writeFileSync(getProjectPackageJsonPath, JSON.stringify(projectPackageJson));
+  fs.writeFileSync(getProjectPackageJsonPath(projectName), JSON.stringify(projectPackageJson));
 }
 
 const run = () => {
