@@ -12,6 +12,7 @@ on:
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
+  NX_BRANCH: ${{ github.head_ref || github.ref_name }}
 
 jobs:
   # Get branch info
@@ -197,7 +198,7 @@ jobs:
     needs: [branch-info, get-affected, pre-build-finished, tag]
     # Only dispatch if:
     # - Any project build is affected by the latest changes.
-    # - The branch is main or release.
+    # - The branch is main.
     if: |
       always() &&
       (needs.pre-build-finished.result == 'success') &&
@@ -211,15 +212,15 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Set version
-        id: set-version
-        run: echo "sha=$(git rev-parse --short "$GITHUB_SHA")" >> $GITHUB_OUTPUT
+      - name: Set sha
+        id: set-sha
+        run: echo "sha=$(git rev-parse "$GITHUB_SHA")" >> $GITHUB_OUTPUT
       - name: Print deploy variables
         run: |
           echo "BRANCH_NAME=$BRANCH_NAME"
           echo "BUILD_REQUIRED_APPS=$BUILD_REQUIRED_APPS"
-          echo "SHA=${{steps.set-version.outputs.sha}}"
+          echo "SHA=${{steps.set-sha.outputs.sha}}"
       - name: Dispatch build
         run: |
           echo "Dispatching build event..."
-          gh workflow run build.yml -f apps=$BUILD_REQUIRED_APPS -f sha=${{steps.set-version.outputs.sha}}
+          gh workflow run build.yml -f apps=$BUILD_REQUIRED_APPS -f sha=${{steps.set-sha.outputs.sha}}

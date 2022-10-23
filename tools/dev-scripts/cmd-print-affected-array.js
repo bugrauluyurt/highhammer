@@ -1,3 +1,5 @@
+//@INFO: Ref:  https://www.javierbrea.com/blog/pnpm-nx-monorepo-03/
+
 const path = require("path");
 
 const spawn = require("cross-spawn");
