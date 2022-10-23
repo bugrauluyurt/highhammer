@@ -11,6 +11,8 @@ on:
         description: 'Apps: (Write a list of apps to build. Ex: ["client-app", "api-core"]). Empty array creates images for all services.'
         default: '[]'
         required: false
+  release:
+    types: [published]
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -96,6 +98,12 @@ jobs:
         run: |
           VERSION="$(git tag --points-at ${{needs.set-inputs.outputs.sha}})"
 
+          # If there is no version set the version to the tag ref
+          if [[ $VERSION == "" ]]; then
+            VERSION="$GITHUB_REF_NAME"
+          fi
+
+          # If there is still no version set the version to sha
           if [[ $VERSION == "" ]]; then
             VERSION="${{needs.set-inputs.outputs.sha}}"
           fi
