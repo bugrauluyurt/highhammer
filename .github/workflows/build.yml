@@ -138,6 +138,7 @@ jobs:
           node tools/dev-scripts/cmd-bump-project-version.js '${{matrix.projectName}}' $VERSION_PROJECT
 
           # Send it via git
+          git pull
           git add -A
           git commit -m "chore: [skip ci] ${{matrix.projectName}}'s package.json version bumped up to $VERSION_PROJECT"
           git push origin ${{ steps.branch-name.outputs.current_branch }}
