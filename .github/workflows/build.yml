@@ -30,6 +30,9 @@ jobs:
   set-inputs:
     runs-on: ubuntu-latest
     steps:
+      - name: Get branch name
+        id: branch-name
+        uses: tj-actions/branch-names@v6
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
@@ -102,8 +105,8 @@ jobs:
           rm -rf ./apps/${{matrix.projectName}}/dist
           # @INFO: For now skip the api-worker and e2e builds, since it is not being used. Skipping is done inside the 'cmd-get-build-projects.js' script
           cp -r ./dist/apps/${{matrix.projectName}}/ ./apps/${{matrix.projectName}}/dist/
-      - name: Version
-        id: version
+      - name: Version monorepo
+        id: version-monorepo
         run: |
           VERSION="$(git tag --points-at ${{needs.set-inputs.outputs.sha}})"
 
@@ -122,11 +125,22 @@ jobs:
           fi
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
+      - name: Version project
+        id: version-project
+        run: |
+          VERSION_PROJECT="$(node tools/dev-scripts/cmd-generate-calver.js '${{matrix.projectName}}')"
+          echo "version=$VERSION_PROJECT" >> $GITHUB_OUTPUT
+
+          # Bump the project version inside the package.json and push it without triggering the CI.
+          node tools/dev-scripts/cmd-bump-project-version.js '${{matrix.projectName}}' $VERSION_PROJECT
+          git add -A
+          git commit -m "chore: [skip ci] ${{matrix.projectName}}'s package.json version bumped up to $VERSION_PROJECT"
+          git push origin ${{ steps.branch-name.outputs.current_branch }}
       - name: Package
         run: |
           IMAGE_NAME="${{matrix.projectName}}"
-          VERSION_PROJECT="$(node tools/dev-scripts/cmd-generate-calver.js '${{matrix.projectName}}')"
-          VERSION_MONOREPO="${{steps.version.outputs.version}}"
+          VERSION_PROJECT="${{steps.version-project.outputs.version}}"
+          VERSION_MONOREPO="${{steps.version-monorepo.outputs.version}}"
           CONTAINER_TAG="$ACR_ENDPOINT/$IMAGE_NAME:$VERSION_PROJECT-$VERSION_MONOREPO"
 
           # - Docker login
