@@ -10,7 +10,6 @@ on:
   pull_request:
 
 env:
-  GH_TOKEN: ${{ secrets.GH_TOKEN_SEMANTIC_RELEASE }}
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
   NX_BRANCH: ${{ github.head_ref || github.ref_name }}
 
@@ -192,6 +191,8 @@ jobs:
       - name: Install dev dependencies
         run: pnpm install --dev
       - name: Trigger semantic-release
+        env:
+           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_SEMANTIC_RELEASE }}
         run: pnpm semantic-release
   dispatch-build:
     runs-on: ubuntu-latest
