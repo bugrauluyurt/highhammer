@@ -110,12 +110,13 @@ jobs:
           fi
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-      - name: Package
+      - name: Docker:login
         uses: azure/docker-login@v1
         with:
           login-server: $ACR_ENDPOINT
           username: $ACR_USERNAME
           password: $ACR_PASSWORD
+      - name: Docker:build
         run: |
           IMAGE_NAME="${{matrix.projectName}}"
           VERSION="${{steps.version.outputs.version}}"
