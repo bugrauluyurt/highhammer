@@ -17,6 +17,7 @@ importers:
       '@nrwl/react': 15.0.1
       '@nrwl/web': 15.0.1
       '@nrwl/workspace': 15.0.1
+      '@semantic-release/exec': ^6.0.3
       '@testing-library/react': 13.4.0
       '@types/jest': 28.1.8
       '@types/node': 18.7.18
@@ -68,6 +69,7 @@ importers:
       '@nrwl/react': 15.0.1_4rfaagsksjpdqxfzksntmtalcq
       '@nrwl/web': 15.0.1_4rfaagsksjpdqxfzksntmtalcq
       '@nrwl/workspace': 15.0.1_7p4kftbl4xdiv7pp73ecrv754e
+      '@semantic-release/exec': 6.0.3_semantic-release@19.0.5
       '@testing-library/react': 13.4.0_biqbaboplfbrettd7655fr4n2y
       '@types/jest': 28.1.8
       '@types/node': 18.7.18
@@ -3084,6 +3086,23 @@ packages:
   /@semantic-release/error/3.0.0:
     resolution: {integrity: sha512-5hiM4Un+tpl4cKw3lV4UgzJj+SmfNIDCLLw0TepzQxz9ZGV5ixnqkzIVF+3tp0ZHgcMKE+VNGHJjEeyFG2dcSw==}
     engines: {node: '>=14.17'}
+    dev: true
+
+  /@semantic-release/exec/6.0.3_semantic-release@19.0.5:
+    resolution: {integrity: sha512-bxAq8vLOw76aV89vxxICecEa8jfaWwYITw6X74zzlO0mc/Bgieqx9kBRz9z96pHectiTAtsCwsQcUyLYWnp3VQ==}
+    engines: {node: '>=14.17'}
+    peerDependencies:
+      semantic-release: '>=18.0.0'
+    dependencies:
+      '@semantic-release/error': 3.0.0
+      aggregate-error: 3.1.0
+      debug: 4.3.4
+      execa: 5.1.1
+      lodash: 4.17.21
+      parse-json: 5.2.0
+      semantic-release: 19.0.5
+    transitivePeerDependencies:
+      - supports-color
     dev: true
 
   /@semantic-release/github/8.0.6_semantic-release@19.0.5:
