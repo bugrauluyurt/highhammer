@@ -110,19 +110,13 @@ jobs:
           fi
 
           echo "version=$VERSION" >> $GITHUB_OUTPUT
-      - name: Docker:login
-        uses: azure/docker-login@v1
-        with:
-          login-server: $ACR_ENDPOINT
-          username: $ACR_USERNAME
-          password: $ACR_PASSWORD
-      - name: Docker:build
+      - name: Package
         run: |
           IMAGE_NAME="${{matrix.projectName}}"
           VERSION="${{steps.version.outputs.version}}"
           TAG="$ACR_ENDPOINT/$IMAGE_NAME:$VERSION"
-          # - Docker login (Not required after azure/docker-login)
-          # echo $ACR_PASSWORD | docker login $ACR_ENDPOINT -u $ACR_USERNAME --password-stdin
+          # - Docker login
+          echo $ACR_PASSWORD | docker login $ACR_ENDPOINT -u $ACR_USERNAME --password-stdin
           # - Docker build
           docker build -t $TAG -f ./apps/${{matrix.projectName}}/Dockerfile ./apps/${{matrix.projectName}}
           # - Docker push
