@@ -177,6 +177,7 @@ jobs:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+          persist-credentials: false
       # Install Pnpm
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
@@ -193,7 +194,7 @@ jobs:
         run: pnpm install --dev
       - name: Trigger semantic-release
         env:
-           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_SEMANTIC_RELEASE }}
         run: pnpm semantic-release
   dispatch-build:
     runs-on: ubuntu-latest
@@ -207,7 +208,7 @@ jobs:
       (needs.tag.result == 'success' || needs.tag.result == 'skipped') &&
       fromJson(needs.get-affected.outputs.build)[0] &&
       (github.event.pull_request.base.ref == '') &&
-      contains(fromJson('["main"]'), needs.branch-info.outputs.branch-name)
+      contains(fromJson('["release"]'), needs.branch-info.outputs.branch-name)
     env:
       BUILD_REQUIRED_APPS: ${{needs.get-affected.outputs.build}}
       BRANCH_NAME: ${{needs.branch-info.outputs.branch-name}}
