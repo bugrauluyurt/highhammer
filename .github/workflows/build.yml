@@ -132,10 +132,14 @@ jobs:
         id: version-project
         run: |
           VERSION_PROJECT="$(node tools/dev-scripts/cmd-generate-calver.js '${{matrix.projectName}}')"
+          CURRENT_BRANCH="${{ steps.branch-name.outputs.current_branch }}"
+
+          # Set the project version
           echo "version=$VERSION_PROJECT" >> $GITHUB_OUTPUT
 
           # Checkout to head after each commit.
-          git checkout HEAD
+          git checkout $CURRENT_BRANCH
+          git pull origin $CURRENT_BRANCH
 
           # Bump the project version inside the package.json and push it without triggering the CI.
           node tools/dev-scripts/cmd-bump-project-version.js '${{matrix.projectName}}' $VERSION_PROJECT
@@ -143,7 +147,7 @@ jobs:
           # Send it via git
           git add -A
           git commit -m "chore: [skip ci] ${{matrix.projectName}}'s package.json version bumped up to $VERSION_PROJECT"
-          git push origin ${{ steps.branch-name.outputs.current_branch }}
+          git push origin $CURRENT_BRANCH
       - name: Package
         run: |
           IMAGE_NAME="${{matrix.projectName}}"
