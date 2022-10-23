@@ -192,7 +192,7 @@ jobs:
         run: pnpm install --dev
       - name: Trigger semantic-release
         env:
-           GITHUB_TOKEN: ${{ secrets.GH_TOKEN_SEMANTIC_RELEASE }}
+           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: pnpm semantic-release
   dispatch-build:
     runs-on: ubuntu-latest
@@ -206,7 +206,7 @@ jobs:
       (needs.tag.result == 'success' || needs.tag.result == 'skipped') &&
       fromJson(needs.get-affected.outputs.build)[0] &&
       (github.event.pull_request.base.ref == '') &&
-      contains(fromJson('["release"]'), needs.branch-info.outputs.branch-name)
+      contains(fromJson('["main"]'), needs.branch-info.outputs.branch-name)
     env:
       BUILD_REQUIRED_APPS: ${{needs.get-affected.outputs.build}}
       BRANCH_NAME: ${{needs.branch-info.outputs.branch-name}}
@@ -221,6 +221,7 @@ jobs:
           echo "BRANCH_NAME=$BRANCH_NAME"
           echo "BUILD_REQUIRED_APPS=$BUILD_REQUIRED_APPS"
           echo "SHA=${{steps.set-sha.outputs.sha}}"
+          echo "VERSION=$(git tag --points-at ${{needs.set-inputs.outputs.sha}})"
       - name: Dispatch build
         run: |
           echo "Dispatching build event..."
