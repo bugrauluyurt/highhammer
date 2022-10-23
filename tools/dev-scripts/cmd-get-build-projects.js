@@ -30,7 +30,7 @@ const getBuildProjects = () => {
     }
     return inputAffectedApps.includes(projectName) ? projectName : undefined
   }).filter(Boolean)
-  return JSON.stringify(generatedProjects.length ? generateProject : allWorkspaceProjects);
+  return JSON.stringify(generatedProjects.length ? generatedProjects : allWorkspaceProjects);
 }
 
 const run = () => {
