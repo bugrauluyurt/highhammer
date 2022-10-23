@@ -4,7 +4,7 @@ import { Injectable } from '@nestjs/common';
 export class AppService {
   getData(): { message: string } {
     return {
-      message: 'Welcome to api-core changed!'
+      message: 'Welcome to api-core!'
     };
   }
 }
