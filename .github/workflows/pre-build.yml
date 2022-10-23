@@ -10,7 +10,7 @@ on:
   pull_request:
 
 env:
-  GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  GH_TOKEN: ${{ secrets.GH_TOKEN_SEMANTIC_RELEASE }}
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
   NX_BRANCH: ${{ github.head_ref || github.ref_name }}
 
@@ -198,14 +198,14 @@ jobs:
     needs: [branch-info, get-affected, pre-build-finished, tag]
     # Only dispatch if:
     # - Any project build is affected by the latest changes.
-    # - The branch is main.
+    # - The branch is release.
     if: |
       always() &&
       (needs.pre-build-finished.result == 'success') &&
       (needs.tag.result == 'success' || needs.tag.result == 'skipped') &&
       fromJson(needs.get-affected.outputs.build)[0] &&
       (github.event.pull_request.base.ref == '') &&
-      contains(fromJson('["main"]'), needs.branch-info.outputs.branch-name)
+      contains(fromJson('["release"]'), needs.branch-info.outputs.branch-name)
     env:
       BUILD_REQUIRED_APPS: ${{needs.get-affected.outputs.build}}
       BRANCH_NAME: ${{needs.branch-info.outputs.branch-name}}
