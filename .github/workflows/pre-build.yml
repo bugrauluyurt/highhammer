@@ -71,9 +71,9 @@ jobs:
         # main and release branches will run all the tests once workflow is run
         run: |
             if [[ "${{github.event.pull_request.base.ref}}" == "" ]]; then
+              echo "lint=$(node tools/dev-scripts/cmd-print-affected-array.js lint)" >> $GITHUB_OUTPUT
+              echo "test-unit=$(node tools/dev-scripts/cmd-print-affected-array.js test-unit)" >> $GITHUB_OUTPUT
               # Running on origin/release or origin/main branch
-              echo "lint=$(node tools/dev-scripts/cmd-print-affected-array.js lint --all)" >> $GITHUB_OUTPUT
-              echo "test-unit=$(node tools/dev-scripts/cmd-print-affected-array.js test-unit --all)" >> $GITHUB_OUTPUT
               if [[ $IS_INDEPENDENT_BUILD_ENABLED == "true" ]]; then
                 echo "build=$(node tools/dev-scripts/cmd-print-affected-array.js build)" >> $GITHUB_OUTPUT
               else
