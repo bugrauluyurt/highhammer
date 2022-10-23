@@ -36,7 +36,6 @@
     "nx:migrate:run": "pnpm check:dependencies --only=node && pnpm install --no-frozen-lockfile && pnpm nx migrate --run-migrations"
   },
   "devDependencies": {
-    "@jscutlery/semver": "^2.27.1",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
     "@nrwl/cli": "15.0.1",
@@ -89,3 +88,4 @@
     "yargs": "^17.5.1"
   }
 }
+
