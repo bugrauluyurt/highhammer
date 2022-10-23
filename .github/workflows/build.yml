@@ -11,6 +11,9 @@ on:
         description: 'Apps: (Write a list of apps to build. Ex: ["client-app", "api-core"]). Empty array creates images for all services.'
         default: '[]'
         required: false
+      tag:
+        description: 'Next build tag'
+        required: false
   # push:
   #   tags:
   #     - '*'
@@ -98,6 +101,10 @@ jobs:
         id: version
         run: |
           VERSION="$(git tag --points-at ${{needs.set-inputs.outputs.sha}})"
+
+          if [[ $VERSION == "" ]]; then
+            VERSION="${{needs.set-inputs.outputs.tag}}"
+          fi
 
           # If there is no version set the version to the tag ref if the event source is push
           if [[ $VERSION == "" && "${{github.event_name == 'push'}}" == "true" ]]; then
