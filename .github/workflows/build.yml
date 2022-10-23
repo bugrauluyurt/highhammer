@@ -125,13 +125,13 @@ jobs:
       - name: Package
         run: |
           IMAGE_NAME="${{matrix.projectName}}"
-          CALVER="$(node tools/dev-scripts/cmd-generate-calver.js '${{matrix.projectName}}')"
-          VERSION="${{steps.version.outputs.version}}"
-          CONTAINER_TAG="$ACR_ENDPOINT/$IMAGE_NAME:$CALVER-$VERSION"
+          VERSION_PROJECT="$(node tools/dev-scripts/cmd-generate-calver.js '${{matrix.projectName}}')"
+          VERSION_MONOREPO="${{steps.version.outputs.version}}"
+          CONTAINER_TAG="$ACR_ENDPOINT/$IMAGE_NAME:$VERSION_PROJECT-$VERSION_MONOREPO"
 
           # - Docker login
           echo $ACR_PASSWORD | docker login $ACR_ENDPOINT -u $ACR_USERNAME --password-stdin
           # - Docker build
           docker build -t $CONTAINER_TAG -f ./apps/${{matrix.projectName}}/Dockerfile ./apps/${{matrix.projectName}}
           # - Docker push
-          docker push $TAG
+          docker push $CONTAINER_TAG
