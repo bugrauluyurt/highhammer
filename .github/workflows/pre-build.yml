@@ -67,24 +67,27 @@ jobs:
       # Set the affected arrays
       - name: Get affected
         id: get-projects-arrays
-        # main and release branches will all the tests once workflow is run
+        # main and release branches will run all the tests once workflow is run
         run: |
             if [[ "${{github.event.pull_request.base.ref}}" == "" ]]; then
               # Running on origin/release or origin/main branch
               echo "lint=$(node tools/dev-scripts/cmd-print-affected-array.js lint --all)" >> $GITHUB_OUTPUT
               echo "test-unit=$(node tools/dev-scripts/cmd-print-affected-array.js test-unit --all)" >> $GITHUB_OUTPUT
               echo "build=$(node tools/dev-scripts/cmd-print-affected-array.js build --all)" >> $GITHUB_OUTPUT
+              echo "build-independent=$(node tools/dev-scripts/cmd-print-affected-array.js build)" >> $GITHUB_OUTPUT
             else
               # Running on PR
               echo "test-unit=$(node tools/dev-scripts/cmd-print-affected-array.js test origin/${{needs.branch-info.outputs.base-branch-name}})" >> $GITHUB_OUTPUT
               echo "lint=$(node tools/dev-scripts/cmd-print-affected-array.js lint origin/${{needs.branch-info.outputs.base-branch-name}})" >> $GITHUB_OUTPUT
               echo "build=[]" >> $GITHUB_OUTPUT
+              echo "build-independent=[]" >> $GITHUB_OUTPUT
             fi
       - name: Print affected
         run: |
           echo "Test-Unit (Affected): ${{steps.get-projects-arrays.outputs.test-unit}}"
           echo "Lint (Affected): ${{steps.get-projects-arrays.outputs.lint}}"
           echo "Build (Affected): ${{steps.get-projects-arrays.outputs.build}}"
+          echo "Build-Independent (Affected): ${{steps.get-projects-arrays.outputs.build-independent}}"
     outputs:
       test-unit: ${{ steps.get-projects-arrays.outputs.test-unit }}
       lint: ${{ steps.get-projects-arrays.outputs.lint }}
