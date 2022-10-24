@@ -148,7 +148,7 @@ jobs:
 
           # Send it via git
           git add -A
-          git commit -m "chore: [skip ci] ${{matrix.projectName}}'s package.json version bumped up to $VERSION_PROJECT"
+          git commit -m "chore: [skip ci][skip release] ${{matrix.projectName}} -> $VERSION_PROJECT"
           git push origin $CURRENT_BRANCH
       - name: Package
         run: |
