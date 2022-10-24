@@ -105,11 +105,6 @@ jobs:
             VERSION="${{needs.set-inputs.outputs.tag}}"
           fi
 
-          # If there is no version set the version to the tag ref if the event source is push
-          if [[ $VERSION == "" && "${{github.event_name == 'push'}}" == "true" ]]; then
-            VERSION="$GITHUB_REF_NAME"
-          fi
-
           # If there is still no version set the version to sha
           if [[ $VERSION == "" ]]; then
             VERSION="${{needs.set-inputs.outputs.sha}}"
