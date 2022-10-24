@@ -20,7 +20,6 @@ on:
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  GH_ACTION_TOKEN: ${{ secrets.GH_ACTION_TOKEN }}
   ACR_ENDPOINT: ${{ secrets.ACR_ENDPOINT }}
   ACR_USERNAME: ${{ secrets.ACR_USERNAME }}
   ACR_PASSWORD: ${{ secrets.ACR_PASSWORD }}
@@ -88,7 +87,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
-          token: $GH_ACTION_TOKEN
+          token: ${{ secrets.GH_WORKFLOW_TOKEN }}
       - run: |
           git config user.name github-actions
           git config user.email github-actions@github.com
