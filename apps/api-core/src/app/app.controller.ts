@@ -8,7 +8,7 @@ export class AppController {
 
   @Get()
   getData() {
-    // @INFO: Getting the date from services
+    // @INFO: Getting the date from services changed
     return this.appService.getData();
   }
 }
