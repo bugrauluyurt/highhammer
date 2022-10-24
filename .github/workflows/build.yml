@@ -6,17 +6,6 @@ on:
       apps:
         description: 'Apps: (Write a list of apps to build. Ex: ["client-app", "api-core"]). Empty array creates images for all services.'
         default: '[]'
-        required: false
-  workflow_call:
-    inputs:
-      apps:
-        description: 'Apps: (Write a list of apps to build. Ex: ["client-app", "api-core"]). Empty array creates images for all services.'
-        type: string
-        default: '[]'
-        required: false
-      tag:
-        description: 'Next build tag:'
-        type: string
         required: true
 
 env:
@@ -36,7 +25,10 @@ jobs:
         uses: tj-actions/branch-names@v6
       - uses: actions/checkout@v3
         with:
+          token: ${{ secrets.GH_WORKFLOW_TOKEN }}
           fetch-depth: 0
+      - run: |
+          git pull origin ${{ steps.branch-name.outputs.current_branch }}
       - name: Use Node.js
         uses: actions/setup-node@v3
         with:
@@ -48,11 +40,7 @@ jobs:
           echo "apps=$(node tools/dev-scripts/cmd-get-build-projects.js '${{inputs.apps}}')" >> $GITHUB_OUTPUT
 
           # INPUT -> Tag
-          if [[ "${{ inputs.tag }}" == "" ]]; then
-            echo "tag=$(git describe --abbrev=0 --tags | tr -d v)" >> $GITHUB_OUTPUT
-          else
-            echo "tag=${{ inputs.tag }}" >> $GITHUB_OUTPUT
-          fi
+          echo "tag=$(git describe --abbrev=0 --tags | tr -d v)" >> $GITHUB_OUTPUT
 
           # INPUT - Sha
           echo "sha=$(git rev-parse "$GITHUB_SHA")" >> $GITHUB_OUTPUT
@@ -102,14 +90,11 @@ jobs:
           node-version: ${{ matrix.node }}
           cache: 'pnpm'
       - name: Install dependencies
-        # @INFO: Don't install only prod dependencies. Dev dependencies are needed to use the nx build and cloud.
         run: pnpm install
       - name: Build
         run: |
-          git checkout ${{needs.set-inputs.outputs.sha}}
           pnpm nx run ${{ matrix.projectName }}:build
           rm -rf ./apps/${{matrix.projectName}}/dist
-          # @INFO: For now skip the api-worker and e2e builds, since it is not being used. Skipping is done inside the 'cmd-get-build-projects.js' script
           cp -r ./dist/apps/${{matrix.projectName}}/ ./apps/${{matrix.projectName}}/dist/
       - name: Version monorepo
         id: version-monorepo

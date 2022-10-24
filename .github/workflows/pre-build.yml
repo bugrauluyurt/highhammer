@@ -236,4 +236,4 @@ jobs:
       - name: Dispatch build
         run: |
           echo "Dispatching build event..."
-          gh workflow run build.yml -f apps=$BUILD_REQUIRED_APPS -f tag=${{needs.tag.outputs.tag}}
+          gh workflow run build.yml -f apps=$BUILD_REQUIRED_APPS
