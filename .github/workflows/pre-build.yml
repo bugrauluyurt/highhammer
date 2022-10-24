@@ -10,6 +10,7 @@ on:
   pull_request:
 
 env:
+  # @INFO: If independent builds are enabled, only affected projects are going to be deployed.
   IS_INDEPENDENT_BUILD_ENABLED: "true"
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
   NX_CLOUD_AUTH_TOKEN: ${{ secrets.NX_CLOUD_AUTH_TOKEN }}
