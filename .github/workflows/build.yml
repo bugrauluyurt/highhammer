@@ -14,9 +14,6 @@ on:
       tag:
         description: 'Next build tag'
         required: false
-  # push:
-  #   tags:
-  #     - '*'
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -148,7 +145,7 @@ jobs:
 
           # Send it via git
           git add -A
-          git commit -m "chore: [skip ci][skip release] ${{matrix.projectName}} -> $VERSION_PROJECT"
+          git commit -m "version(:rocket:): ${{matrix.projectName}} -> $VERSION_PROJECT [skip ci][skip release]"
           git push origin $CURRENT_BRANCH
       - name: Package
         run: |

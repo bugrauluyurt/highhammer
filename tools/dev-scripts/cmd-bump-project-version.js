@@ -17,7 +17,7 @@ const getVersionsJson = () => {
 
 const bumpProjectVersion = (projectName, nextCalver) => {
   const versionsJson = {...getVersionsJson()};
-  versionsJson[projectName].version = nextCalver;
+  versionsJson[projectName] = nextCalver;
   fs.writeFileSync(getVersionsJsonPath(), JSON.stringify(versionsJson, null, 4));
 }
 
