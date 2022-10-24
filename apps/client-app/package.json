@@ -1,6 +1,6 @@
 {
     "name": "client-app",
-    "version": "2022.10.24.2",
+    "version": "2022.10.24.3",
     "license": "MIT",
     "private": true,
     "dependencies": {
