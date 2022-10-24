@@ -43,7 +43,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       # Check out the repository
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
       # Install Pnpm
@@ -52,7 +53,7 @@ jobs:
         with:
           version: "7.x"
       # Install Node.js
-      - name: Use Node.js
+      - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: "16.17.0"
@@ -117,7 +118,7 @@ jobs:
         uses: pnpm/action-setup@v2.2.4
         with:
           version: "7.x"
-      - name: Use Node.js
+      - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
@@ -149,7 +150,7 @@ jobs:
         uses: pnpm/action-setup@v2.2.4
         with:
           version: "7.x"
-      - name: Use Node.js
+      - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node }}
@@ -179,23 +180,20 @@ jobs:
       (github.event.pull_request.base.ref == '') &&
       (needs.branch-info.outputs.branch-name == 'main')
     steps:
-      # Check out the repository
-      - uses: actions/checkout@v3
+      - name: Checkout
+        uses: actions/checkout@v3
         with:
           fetch-depth: 0
           persist-credentials: false
-      # Install Pnpm
       - name: Install pnpm
         uses: pnpm/action-setup@v2.2.4
         with:
           version: "7.x"
-      # Install Node.js
-      - name: Use Node.js
+      - name: Setup node
         uses: actions/setup-node@v3
         with:
           node-version: "16.17.0"
           cache: 'pnpm'
-      # Install dev-dependencies only
       - name: Install dev dependencies
         run: pnpm install --dev
       - name: Trigger semantic-release
