@@ -61,7 +61,7 @@ jobs:
       - name: Install dependencies
         run: pnpm install
       # Configure Nx to be able to detect changes between branches when we are in a PR
-      - name: Derive appropriate SHAs for base and head for `nx affected` commands
+      - name: Derive shas for Nx
         id: set-shas
         uses: nrwl/nx-set-shas@v3
         with:
@@ -228,16 +228,12 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Set sha
-        id: set-sha
-        run: echo "sha=$(git rev-parse "$GITHUB_SHA")" >> $GITHUB_OUTPUT
-      - name: Print deploy variables
+      - name: Print dispatch variables
         run: |
           echo "BRANCH_NAME=$BRANCH_NAME"
           echo "BUILD_REQUIRED_APPS=$BUILD_REQUIRED_APPS"
-          echo "SHA=${{steps.set-sha.outputs.sha}}"
           echo "TAG=${{needs.tag.outputs.tag}}"
       - name: Dispatch build
         run: |
           echo "Dispatching build event..."
-          gh workflow run build.yml -f apps=$BUILD_REQUIRED_APPS -f sha=${{steps.set-sha.outputs.sha}} -f tag=${{needs.tag.outputs.tag}}
+          gh workflow run build.yml -f apps=$BUILD_REQUIRED_APPS -f tag=${{needs.tag.outputs.tag}}

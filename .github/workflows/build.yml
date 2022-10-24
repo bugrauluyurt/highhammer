@@ -3,17 +3,21 @@ name: build
 on:
   workflow_dispatch:
     inputs:
-      # Sha: Git sha. If not provided the system will default to the HEAD of the branch
-      sha:
-        description: 'Sha: Commit sha to build from.'
-        required: false
       apps:
         description: 'Apps: (Write a list of apps to build. Ex: ["client-app", "api-core"]). Empty array creates images for all services.'
         default: '[]'
         required: false
-      tag:
-        description: 'Next build tag'
+  workflow_call:
+    inputs:
+      apps:
+        description: 'Apps: (Write a list of apps to build. Ex: ["client-app", "api-core"]). Empty array creates images for all services.'
+        type: string
+        default: '[]'
         required: false
+      tag:
+        description: 'Next build tag:'
+        type: string
+        required: true
 
 env:
   GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -44,14 +48,14 @@ jobs:
           echo "apps=$(node tools/dev-scripts/cmd-get-build-projects.js '${{inputs.apps}}')" >> $GITHUB_OUTPUT
 
           # INPUT -> Tag
-          echo "tag=${{ inputs.tag }}" >> $GITHUB_OUTPUT
+          if [[ "${{ inputs.tag }}" == "" ]]; then
+            echo "tag=$(git describe --abbrev=0 --tags | tr -d v)" >> $GITHUB_OUTPUT
+          else
+            echo "tag=${{ inputs.tag }}" >> $GITHUB_OUTPUT
+          fi
 
           # INPUT - Sha
-          if [[ "${{inputs.sha}}" == "" ]]; then
-            echo "sha=$(git rev-parse "$GITHUB_SHA")" >> $GITHUB_OUTPUT
-          else
-            echo "sha=${{ inputs.sha }}" >> $GITHUB_OUTPUT
-          fi
+          echo "sha=$(git rev-parse "$GITHUB_SHA")" >> $GITHUB_OUTPUT
 
           # INPUT - Branch
           echo "branch=${{ github.head_ref || github.ref_name }}" >> $GITHUB_OUTPUT
