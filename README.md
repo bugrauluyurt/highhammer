@@ -45,9 +45,9 @@ $ mkcert -key-file localhost-key.pem -cert-file localhost-crt.pem localhost
 
 The monorepo consists of three different applications.
 
-**client-app**: `React` SPA for front-end face of the application.
-**api-core**: Written by using `NestJS` - Main interface of application REST api
-**api-worker**: Written by using NestJS - Worker app)
+- **client-app**: `React` SPA for front-end face of the application.
+- **api-core**: Written by using `NestJS` - Main interface of application REST api
+- **api-worker**: Written by using NestJS - Worker app)
 
 These three applications can run **at the same time (React-SPA, Rest-API, Worker)** or **client-app (React-SPA)** can run only by itself while pointing its dependent URIs to the remote QA/DEV servers.
 
