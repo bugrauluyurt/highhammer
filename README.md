@@ -25,7 +25,7 @@ Below are the Nx plugins that this project uses:
 - [x] Pnpm workspaces.
 - [x] Single pnpm cache container for dockerized workspace components.
 - [x] Workspace versioning by using semantic-release.
-- [x] Project versioning by using calver.
+- [x] Project versioning by using calver convention.
 - [x] Various dev-scripts for affected project understanding, calver generation and versioning.
 - [x] Tailwind and styled-components integration.
 - [ ] Radix UI integration.
