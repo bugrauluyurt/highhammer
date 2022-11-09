@@ -16,6 +16,22 @@ Below are the Nx plugins that this project uses:
 - [Nest](https://nestjs.com): `@nrwl/nest`
 - [Node](https://nodejs.org): `@nrwl/node`
 
+## Features
+
+- [x] Docker-compose integration.
+- [x] Separate package.json for workspace projects.
+- [x] CI with Github actions (build, test, containerization).
+- [x] Nx-workspace and Nx-cloud distributed caching.
+- [x] Pnpm workspaces.
+- [x] Single pnpm cache container for dockerized workspace components.
+- [x] Workspace versioning by using semantic-release.
+- [x] Project versioning by using calver.
+- [x] Various dev-scripts for affected project understanding, calver generation and versioning.
+- [x] Tailwind and styled-components integration.
+- [ ] Radix UI integration.
+- [ ] Azure pipelines for deployment.
+- [ ] Kubernetes and Helm Charts integration.
+
 ## Development setup
 
 This section explains how to setup the application for development.
