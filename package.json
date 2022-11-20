@@ -13,7 +13,7 @@
     "docker:workspace:host:up": "cross-env NX_APP_ENV=host docker compose -f ./docker-compose.workspace.yaml up",
     "docker:workspace:qa:up": "cross-env NX_APP_ENV=qa docker compose -f ./docker-compose.workspace.yaml up",
     "docker:workspace:dev:up": "cross-env NX_APP_ENV=dev docker compose -f ./docker-compose.workspace.yaml up",
-    "docker:up": "pnpm docker:workspace:dev:up",
+    "docker:up": "pnpm docker:workspace:host:up",
     "docker:down": "docker compose -f ./docker-compose.workspace.yaml down",
     "docker:build": "docker compose -f ./docker-compose.workspace.yaml build",
     "check": "pnpm check:node-modules && npm run check:dependencies",

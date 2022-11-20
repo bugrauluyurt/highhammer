@@ -1,14 +1,19 @@
 FROM node:16.17.0-alpine
 
 WORKDIR '/tmp'
-COPY ./tools/dev-scripts/cmd-pnpm-install.sh ./
-RUN chmod +x ./cmd-pnpm-install.sh && /bin/sh ./cmd-pnpm-install.sh
+# Uncomment to install a verified version
+# COPY ./tools/dev-scripts/cmd-pnpm-install.sh ./
+# RUN chmod +x ./cmd-pnpm-install.sh && /bin/sh ./cmd-pnpm-install.sh
+RUN npm install -g pnpm
 
 WORKDIR '/usr/src/root'
-COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./.npmrc ./
+COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./.npmrc ./workspace.json ./
 COPY ./apps/api-core/package.json ./apps/api-core/
+
 RUN pnpm config set store-dir ./.pnpm-store
+RUN --mount=type=cache,id=pnpm-store,target=./.pnpm-store
 RUN pnpm install
+
 COPY . .
 RUN node ./tools/dev-scripts/cmd-pre-pnpm-install.js api-core
 CMD ["pnpm", "docker:api-core"]

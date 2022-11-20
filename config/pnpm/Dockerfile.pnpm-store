@@ -13,4 +13,4 @@ COPY ./apps/api-worker/package.json ./apps/api-worker/
 RUN pnpm config set store-dir ./.pnpm-store
 RUN pnpm install
 # @INFO: Serving the current folder only for health check purposes.
-ENTRYPOINT ["pnpm", "http-server"]
+ENTRYPOINT ["pnpm", "http-server", "-p", "8081"]

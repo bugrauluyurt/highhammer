@@ -26,17 +26,15 @@ x-nx-node-modules-volume:
 
 services:
   nx-base:
-    healthcheck:
-      # Checks if the pnpm-store container is up and running
-      test: "wget --no-verbose --tries=1 --spider http://localhost:4040 || exit 1"
-      interval: 2s
-      timeout: 200s
-      retries: 100
+    # Reference code for healthcheck
+    # healthcheck:
+      # test: "wget --no-verbose --tries=1 --spider http://localhost:8081 || exit 1"
+      # interval: 2s
+      # timeout: 200s
+      # retries: 100
     volumes:
       - *nx-env
       - *nx-tools
       - *nx-libs
       # - *nx-node-modules
-      - pnpm-store:/usr/src/root/.pnpm-store
-    depends_on:
-      - pnpm-store
+      # - ${PNPM_STORE_PATH}:/usr/src/root/.pnpm-store
