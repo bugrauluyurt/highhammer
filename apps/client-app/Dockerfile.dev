@@ -12,7 +12,7 @@ COPY ./apps/client-app/package.json ./apps/client-app/
 
 RUN pnpm config set store-dir ./.pnpm-store
 RUN --mount=type=cache,id=pnpm-store,target=./.pnpm-store
-RUN pnpm install
+RUN pnpm install --no-frozen-lockfile
 
 COPY . .
 RUN node ./tools/dev-scripts/cmd-pre-pnpm-install.js client-app
