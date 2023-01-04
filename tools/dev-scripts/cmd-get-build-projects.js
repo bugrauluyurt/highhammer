@@ -2,6 +2,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { PROJECTS_EXCLUDED } = require('./utils');
 
 const processArguments = process.argv.slice(2);
 
@@ -22,7 +23,7 @@ const getBuildProjects = () => {
   }
   const allWorkspaceProjects = Object.keys(workSpaceJson.projects)
   const generatedProjects = allWorkspaceProjects.map((projectName) => {
-    if (projectName.includes('e2e') || projectName.includes('api-worker')) {
+    if (PROJECTS_EXCLUDED.includes(projectName)) {
       return undefined;
     }
     if (!inputAffectedApps.length) {

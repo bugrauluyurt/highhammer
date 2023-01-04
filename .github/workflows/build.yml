@@ -139,7 +139,7 @@ jobs:
           IMAGE_NAME="${{matrix.projectName}}"
           VERSION_PROJECT="${{steps.version-project.outputs.version}}"
           VERSION_MONOREPO="${{steps.version-monorepo.outputs.version}}"
-          CONTAINER_TAG="$ACR_ENDPOINT/$IMAGE_NAME:$VERSION_PROJECT-$VERSION_MONOREPO"
+          CONTAINER_TAG="$ACR_ENDPOINT/$IMAGE_NAME:$VERSION_MONOREPO"
 
           # - Docker login
           echo $ACR_PASSWORD | docker login $ACR_ENDPOINT -u $ACR_USERNAME --password-stdin
