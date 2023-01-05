@@ -38,12 +38,12 @@ const startDockerLocalRegistry = async () => {
     return;
   }
   console.log(`[Highhammer] Creating local docker registry with name-> ${DOCKER_REGISTRY_NAME} on port ${DOCKER_REGISTRY_PORT}`);
-  const removeExistingRegistry = execPromise(`docker container rm -f ${DOCKER_REGISTRY_NAME}`).then(() => {
+  const removeExistingRegistry = execPromise(`docker container rm -f ${DOCKER_REGISTRY_NAME}`).then((response) => {
     if (response?.stderr?.length && !response.stderr.includes('No such container')) {
       console.log(response?.stderr);
     }
   })
-  return removeExistingRegistry().then(() => {
+  return removeExistingRegistry.then(() => {
     return execPromise(`docker run -d -p ${DOCKER_REGISTRY_PORT}:5000 --name ${DOCKER_REGISTRY_NAME} registry:${DOCKER_REGISTRY_VERSION}`)
       .then((response) => {
         if (response?.stderr?.length) {

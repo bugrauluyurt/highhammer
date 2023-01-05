@@ -94,21 +94,13 @@ const buildProjects = async () => {
 };
 
 const tagAndPushProjectHelmChart = async (chartName, chartPath, version) => {
-  // @TODO: Only client-app is packaged for testing purposes.
+  // @INFO: Only client-app is packaged for testing purposes.
   if (chartName === 'client-app') {
+    const zippedFile = `${chartName}-${version}.tgz`
     return runCmd(`helm package --dependency-update --version ${version} --app-version ${version} ${chartPath}`)
-    .then((response) => {
-      if (response?.stderr?.length) {
-        console.log(response?.stderr);
-        throw new Error(response?.stderr)
-      }
-    })
-    .then(() => {
-      const zippedFile = `${chartName}-${version}.tgz`
-      const zippedPath = path.resolve(__dirname, `../../${zippedFile}`);
-      return runCmd(`helm push "${zippedFile}" oci://${OCI_REPOSITORY_URL}/helm`)
-    })
-    .then(() => runCmd(`helm show all "oci://${OCI_REPOSITORY_URL}/helm/${chartName}" --version ${version}`))
+    .then(() => runCmd(`helm push ${zippedFile} oci://${OCI_REPOSITORY_URL}/helm`))
+    .then(() => runCmd(`helm show all "oci://${OCI_REPOSITORY_URL}/helm/${chartName}" --version ${version}`)).then((response) => console.log(response.stdout))
+    .then(() => runCmd(`rm -f ./${zippedFile}`))
     .catch((e) => {
       console.error('[Highhammer] An error occurred while packaging the chart', e);
       process.exit(1);
