@@ -118,6 +118,7 @@ jobs:
         id: version-project
         run: |
           VERSION_PROJECT="$(node tools/dev-scripts/cmd-generate-calver.js '${{matrix.projectName}}')"
+          VERSION_MONOREPO="${{steps.version-monorepo.outputs.version}}"
           CURRENT_BRANCH="${{ steps.branch-name.outputs.current_branch }}"
 
           # Set the project version
@@ -132,7 +133,7 @@ jobs:
 
           # Send it via git
           git add -A
-          git commit -m "version(:rocket:): ${{matrix.projectName}} -> $VERSION_PROJECT [skip ci][skip release]"
+          git commit -m "version(:rocket:): ${{matrix.projectName}} -> $VERSION_MONOREPO-$VERSION_PROJECT [skip ci][skip release]"
           git push origin $CURRENT_BRANCH
       - name: Package
         run: |

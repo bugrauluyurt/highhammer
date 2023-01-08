@@ -22,7 +22,7 @@ const getCurrentCalverDate = (date = new Date(), format = 'yyyy.mm.dd') => {
       dd: date.getDate().toString(),
       yyyy: date.getFullYear().toString()
   };
-  Object.entries(map).forEach((key, value) => {
+  Object.entries(map).forEach(([key, value]) => {
     if (value.length === 1) {
       map[key] = `0${value}`;
     }
