@@ -1,4 +1,4 @@
-FROM node:16.17.0-alpine
+FROM node:18.13.0-alpine
 
 WORKDIR '/tmp'
 COPY ./tools/dev-scripts/cmd-pnpm-install.sh ./

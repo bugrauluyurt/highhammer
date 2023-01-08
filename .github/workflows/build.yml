@@ -34,7 +34,7 @@ jobs:
       - name: Setup node
         uses: actions/setup-node@v3
         with:
-          node-version: "16.17.0"
+          node-version: "18.13.0"
       - name: Generate inputs
         id: generate-inputs
         run: |
@@ -67,7 +67,7 @@ jobs:
     strategy:
       max-parallel: 4
       matrix:
-        node: ["16.17.0"]
+        node: ["18.13.0"]
         projectName: ${{fromJson(needs.set-inputs.outputs.apps)}}
     env:
       NODE: ${{ matrix.node }}
