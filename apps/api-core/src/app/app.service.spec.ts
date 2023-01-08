@@ -14,8 +14,8 @@ describe('AppService', () => {
   });
 
   describe('getData', () => {
-    it('should return "Welcome to api-core!"', () => {
-      expect(service.getData()).toEqual({ message: 'Welcome to api-core!' });
+    it('should return "Welcome to api-core of Highhammer!"', () => {
+      expect(service.getData()).toEqual({ message: 'Welcome to api-core of Highhammer!' });
     });
   });
 });
