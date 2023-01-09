@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-configmap-file
+data:
+  appConfig.js: |
+    var APP_CONFIG = {
+      {{- if .Values.apiUrl }}
+      API_URL: '{{ .Values.apiUrl }}',
+      {{- end }}
+      {{- if .Values.deploymentRegion }}
+      DEPLOYMENT_REGION: '{{ .Values.deploymentRegion }}',
+      {{- end }}
+    };

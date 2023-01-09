@@ -37,6 +37,9 @@ spec:
             - name: http
               containerPort: {{ .Values.service.port }}
               protocol: TCP
+          volumeMounts:
+            - name: app-configmap-file-overwrite
+              mountPath: /usr/share/nginx/html/config
           livenessProbe:
             httpGet:
               path: /
@@ -59,3 +62,9 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+      volumes:
+        - name: app-configmap-file-overwrite
+        - configMap:
+            defaultMode: 420
+            name: app-configmap-file
+            optional: true

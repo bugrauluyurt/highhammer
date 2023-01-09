@@ -96,18 +96,19 @@ const buildProjects = async () => {
 const tagAndPushProjectHelmChart = async (chartName, chartPath, version) => {
   // @INFO: Only client-app is packaged for testing purposes.
   if (chartName === 'client-app') {
-    const zippedFile = `${chartName}-${version}.tgz`
-    return runCmd(`helm package --dependency-update --version ${version} --app-version ${version} ${chartPath}`)
+    const zippedFile = `${chartName}-${version}.tgz`;
+    return runCmd(`helm lint ${chartPath}`)
+    .then(() => runCmd(`helm package --dependency-update --version ${version} --app-version ${version} ${chartPath}`))
     .then(() => runCmd(`helm push ${zippedFile} oci://${OCI_REPOSITORY_URL}/helm`))
     .then(() => runCmd(`helm show all "oci://${OCI_REPOSITORY_URL}/helm/${chartName}" --version ${version}`)).then((response) => console.log(response.stdout))
     .then(() => runCmd(`rm -f ./${zippedFile}`))
     .catch((e) => {
-      console.error('[Highhammer] An error occurred while packaging the chart', e);
+      console.error(`[Highhammer] An error occurred while packaging the chart ${chartName}`, e);
       process.exit(1);
     });
   }
   return Promise.resolve();
-}
+};
 
 const tagAndPushProjectHelmCharts = async () => {
   if (!OCI_REPOSITORY_URL) {
@@ -125,7 +126,21 @@ const tagAndPushProjectHelmCharts = async () => {
     });
   // @TODO: Project charts are pushed above. Those are the sub-charts. There should be main chart which include all the sub-charts as dependencies with their corresponding versions.
   return Promise.all(promiseBatch)
-}
+};
+
+const helmDryRun = async () => {
+  // @TODO: Here only dry-run the main chart. Do not do it for subcharts. For testing purposes, now only the sub-chart client-app is being dry-run.
+  const { projects } = getWorkspaceJson();
+  const latestTagVersion = await getLatestTagVersion();
+  const promiseBatch = Object.keys(projects)
+    .filter((projectName) => ['client-app'].includes(projectName))
+    .map((projectName) => {
+      const chartName = projectName;
+      const version = latestTagVersion;
+      return runCmd(`helm upgrade --install ${chartName} --version ${version} oci://${OCI_REPOSITORY_URL}/helm/${chartName} --set image.repository="${DOCKER_REGISTRY_URL}:${DOCKER_REGISTRY_PORT}/${chartName}" --set image.tag="${version}"`)
+    })
+  return Promise.all(promiseBatch)
+};
 
 const runJob = async (
   startLog,
@@ -136,7 +151,7 @@ const runJob = async (
   return cmdAsyncCallback().finally(() => {
     console.log('------------------- \n');
   });
-}
+};
 
 const run = async () => {
   try {
@@ -157,6 +172,6 @@ const run = async () => {
     console.log(e);
     process.exit(1);
   }
-}
+};
 
 run();

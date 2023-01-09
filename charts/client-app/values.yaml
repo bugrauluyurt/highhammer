@@ -80,3 +80,7 @@ nodeSelector: {}
 tolerations: []
 
 affinity: {}
+
+# Values set during deployment
+apiUrl: ""
+deploymentRegion: ""
