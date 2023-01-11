@@ -132,9 +132,9 @@ jobs:
           node tools/dev-scripts/cmd-bump-project-version.js '${{matrix.projectName}}' $VERSION_PROJECT
 
           # Send it via git
-          git add -A
-          git commit -m "version(:rocket:): ${{matrix.projectName}} -> $VERSION_MONOREPO-$VERSION_PROJECT [skip ci][skip release]"
-          git push origin $CURRENT_BRANCH
+          # git add -A
+          # git commit -m "version(:rocket:): ${{matrix.projectName}} -> $VERSION_MONOREPO-$VERSION_PROJECT [skip ci][skip release]"
+          # git push origin $CURRENT_BRANCH
       - name: Package
         run: |
           IMAGE_NAME="${{matrix.projectName}}"
