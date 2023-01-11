@@ -64,7 +64,7 @@ spec:
       {{- end }}
       volumes:
         - name: app-configmap-file-overwrite
-        - configMap:
+          configMap:
             defaultMode: 420
             name: app-configmap-file
             optional: true

@@ -137,6 +137,7 @@ const helmDryRun = async () => {
     .map((projectName) => {
       const chartName = projectName;
       const version = latestTagVersion;
+      // helm upgrade --install client-app --version 1.3.41 oci://localhost:54329/helm/client-app --set image.repository="localhost:5020/client-app" --set image.tag="1.3.41"
       return runCmd(`helm upgrade --install ${chartName} --version ${version} oci://${OCI_REPOSITORY_URL}/helm/${chartName} --set image.repository="${DOCKER_REGISTRY_URL}:${DOCKER_REGISTRY_PORT}/${chartName}" --set image.tag="${version}"`)
     })
   return Promise.all(promiseBatch)
@@ -153,6 +154,7 @@ const runJob = async (
   });
 };
 
+// @TODO: Filtered projects list can be given here to all functions here from the start
 const run = async () => {
   try {
     await runJob(
