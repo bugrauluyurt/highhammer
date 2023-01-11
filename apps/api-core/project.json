@@ -12,7 +12,7 @@
         "main": "apps/api-core/src/main.ts",
         "tsConfig": "apps/api-core/tsconfig.app.json",
         "assets": ["apps/api-core/src/assets"],
-        "generatePackageJson": true,
+        "generatePackageJson": false,
         "target": "node",
         "compiler": "tsc"
       },

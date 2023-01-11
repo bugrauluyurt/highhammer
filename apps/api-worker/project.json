@@ -12,7 +12,7 @@
         "main": "apps/api-worker/src/main.ts",
         "tsConfig": "apps/api-worker/tsconfig.app.json",
         "assets": ["apps/api-worker/src/assets"],
-        "generatePackageJson": true,
+        "generatePackageJson": false,
         "target": "node",
         "compiler": "tsc"
       },
