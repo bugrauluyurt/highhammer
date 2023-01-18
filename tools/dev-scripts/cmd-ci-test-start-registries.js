@@ -1,5 +1,6 @@
 const util = require('node:util');
-const { DOCKER_REGISTRY_NAME, DOCKER_REGISTRY_PORT, DOCKER_REGISTRY_VERSION } = require('./utils');
+const path = require('path');
+const { DOCKER_REGISTRY_NAME, DOCKER_REGISTRY_PORT, DOCKER_REGISTRY_VERSION, runCmd } = require('./utils');
 const execPromise = util.promisify(require('node:child_process').exec);
 const { run: startOCIRepository } = require('./cmd-ci-test-install-zot');
 
@@ -44,7 +45,10 @@ const startDockerLocalRegistry = async () => {
     }
   })
   return removeExistingRegistry.then(() => {
-    return execPromise(`docker run -d -p ${DOCKER_REGISTRY_PORT}:5000 --name ${DOCKER_REGISTRY_NAME} registry:${DOCKER_REGISTRY_VERSION}`)
+    // const certificatePath = path.resolve(__dirname, '../../config/certificates')
+    // @INFO: Uncomment the line and replace it with the runCmd if https is necessary
+    // return runCmd(`docker run -d --name ${DOCKER_REGISTRY_NAME} -v ${certificatePath}:/certs -e REGISTRY_HTTP_ADDR=0.0.0.0:443 -e REGISTRY_HTTP_TLS_CERTIFICATE=/certs/localhost-crt.pem -e REGISTRY_HTTP_TLS_KEY=/certs/localhost-key.pem -p ${DOCKER_REGISTRY_PORT}:443 registry:${DOCKER_REGISTRY_VERSION}`)
+    return runCmd(`docker run -d -p ${DOCKER_REGISTRY_PORT}:5000 --name ${DOCKER_REGISTRY_NAME} registry:${DOCKER_REGISTRY_VERSION}`)
       .then((response) => {
         if (response?.stderr?.length) {
           console.log(response?.stderr);

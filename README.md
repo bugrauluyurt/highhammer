@@ -50,7 +50,7 @@ This section explains how to setup the application for development.
 ```
 $ mkcert -install
 $ cd config/certificates
-$ mkcert -key-file localhost-key.pem -cert-file localhost-crt.pem localhost
+$ mkcert -key-file localhost-key.pem -cert-file localhost-crt.pem localhost host.minikube.internal 0.0.0.0 127.0.0.1 ::1
 ```
 
 - Run `pnpm install`. This command will automatically install all the dependencies for your apps & libs inside the monorepo recursively.
