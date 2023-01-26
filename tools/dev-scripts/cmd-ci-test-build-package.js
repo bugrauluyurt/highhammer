@@ -1,12 +1,13 @@
 const path = require('path');
 const fs = require('fs');
 const util = require('node:util');
-const { DOCKER_REGISTRY_URL, DOCKER_REGISTRY_PORT, PROJECTS_EXCLUDED, runCmd } = require('./utils');
+const { DOCKER_REGISTRY_PORT, PROJECTS_EXCLUDED, runCmd } = require('./utils');
 const execPromise = util.promisify(require('node:child_process').exec);
 
 const processArguments = process.argv.slice(2);
 
 const OCI_REPOSITORY_URL = processArguments[0];
+const DOCKER_HUB_USERNAME = processArguments[1];
 
 const getWorkspaceJsonPath = () => path.resolve(__dirname, `../../workspace.json`);
 const getWorkspaceJson = () => {
@@ -50,7 +51,10 @@ const tagAndPushProjectDockerImages = async () => {
     .map((projectName) => {
       const imageName = projectName;
       const versionMonoRepo = latestTagVersion;
-      const containerTag = `${DOCKER_REGISTRY_URL}:${DOCKER_REGISTRY_PORT}/${imageName}:${versionMonoRepo}`;
+      const imagePath = `${imageName}:${versionMonoRepo}`
+      const containerTag = !DOCKER_HUB_USERNAME?.length
+        ? `localhost:${DOCKER_REGISTRY_LOCAL_PORT}/${imagePath}`
+        : `${DOCKER_HUB_USERNAME}/${imagePath}`;
       return tagAndPushProjectDockerImage(projectName, containerTag);
     });
   return Promise.all(promiseBatch)
@@ -137,7 +141,11 @@ const helmDryRun = async () => {
     .map((projectName) => {
       const chartName = projectName;
       const version = latestTagVersion;
+      // For local testing
       // helm upgrade --install client-app --version 1.3.43 oci://localhost:${ZOT_PORT_INSIDE_MINIKUBE}/helm/client-app --set image.repository="host.minikube.internal:5020/client-app" --set image.tag="1.3.43"
+
+      // For remote images
+      // helm upgrade --install client-app --version 1.3.43 oci://localhost:${ZOT_PORT_INSIDE_MINIKUBE}/helm/client-app --set image.repository="bugrauluyurt/client-app" --set image.tag="1.3.43"
       return runCmd(`helm upgrade --install ${chartName} --version ${version} oci://${OCI_REPOSITORY_URL}/helm/${chartName} --set image.repository="host.minikube.internal:${DOCKER_REGISTRY_PORT}/${chartName}" --set image.tag="${version}"`)
     })
   return Promise.all(promiseBatch)
