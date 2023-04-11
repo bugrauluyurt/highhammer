@@ -3,6 +3,7 @@
 const fs = require('fs');
 const path = require('path');
 
+// @IMPORTANT: This script is not needed anymore since NX has removed workspace.json.
 const getWorkSpacePath = () => path.resolve(__dirname, '../../workspace.json')
 
 const getWorkSpaceJson = () => {

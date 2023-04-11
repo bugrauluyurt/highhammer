@@ -8,20 +8,20 @@ const processArguments = process.argv.slice(2);
 
 const AFFECTED_APPS = processArguments[0];
 
-const getWorkSpacePath = () => path.resolve(__dirname, '../../workspace.json')
+const getVersionsPath = () => path.resolve(__dirname, '../../versions.json')
 
-const getWorkSpaceJson = () => {
-  const json = fs.readFileSync(getWorkSpacePath());
+const getVersionsJson = () => {
+  const json = fs.readFileSync(getVersionsPath());
   return JSON.parse(json);
 }
 
 const getBuildProjects = () => {
-  const workSpaceJson = {...getWorkSpaceJson()};
+  const projects = {...getVersionsJson()};
   let inputAffectedApps = AFFECTED_APPS ? JSON.parse(AFFECTED_APPS) : [];
   if (!(inputAffectedApps instanceof Array)) {
     inputAffectedApps = [];
   }
-  const allWorkspaceProjects = Object.keys(workSpaceJson.projects)
+  const allWorkspaceProjects = Object.keys(projects)
   const generatedProjects = allWorkspaceProjects.map((projectName) => {
     if (PROJECTS_EXCLUDED.includes(projectName)) {
       return undefined;

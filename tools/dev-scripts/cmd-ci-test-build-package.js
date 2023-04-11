@@ -9,9 +9,9 @@ const processArguments = process.argv.slice(2);
 const OCI_REPOSITORY_URL = processArguments[0];
 const DOCKER_HUB_USERNAME = processArguments[1];
 
-const getWorkspaceJsonPath = () => path.resolve(__dirname, `../../workspace.json`);
-const getWorkspaceJson = () => {
-  const json = fs.readFileSync(getWorkspaceJsonPath());
+const getProjectVersionsJsonPath = () => path.resolve(__dirname, `../../versions.json`);
+const getProjectVersionsJson = () => {
+  const json = fs.readFileSync(getProjectVersionsJsonPath());
   return JSON.parse(json);
 };
 
@@ -44,7 +44,7 @@ const tagAndPushProjectDockerImage = async (projectName, tag) => {
 };
 
 const tagAndPushProjectDockerImages = async () => {
-  const { projects } = getWorkspaceJson();
+  const projects = getProjectVersionsJson();
   const latestTagVersion = await getLatestTagVersion();
   const promiseBatch = Object.keys(projects)
     .filter((projectName) => !PROJECTS_EXCLUDED.includes(projectName))
@@ -78,7 +78,7 @@ const buildProjects = async () => {
         console.log(response?.stderr);
       } else {
         console.log(`[Highhammer] All projects are build successfully.`);
-        const { projects } = getWorkspaceJson();
+        const projects = getProjectVersionsJson();
         // @INFO: Copy all the dist folder into the project's own folder
         const promiseBatch = Object.keys(projects)
           .filter((projectName) => {
@@ -118,7 +118,7 @@ const tagAndPushProjectHelmCharts = async () => {
   if (!OCI_REPOSITORY_URL) {
     return Promise.reject('[Highhammer][Error] Please pass the OCI repository url as an argument.')
   }
-  const { projects } = getWorkspaceJson();
+  const projects = getProjectVersionsJson();
   const latestTagVersion = await getLatestTagVersion();
   const promiseBatch = Object.keys(projects)
     .filter((projectName) => !PROJECTS_EXCLUDED.includes(projectName))
@@ -134,7 +134,7 @@ const tagAndPushProjectHelmCharts = async () => {
 
 const helmDryRun = async () => {
   // @TODO: Here only dry-run the main chart. Do not do it for subcharts. For testing purposes, now only the sub-chart client-app is being dry-run.
-  const { projects } = getWorkspaceJson();
+  const projects = getProjectVersionsJson();
   const latestTagVersion = await getLatestTagVersion();
   const promiseBatch = Object.keys(projects)
     .filter((projectName) => ['client-app'].includes(projectName))

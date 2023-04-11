@@ -3,17 +3,17 @@
 const fs = require('fs');
 const path = require('path');
 
-const getWorkSpacePath = () => path.resolve(__dirname, '../../workspace.json')
+const getVersionsPath = () => path.resolve(__dirname, '../../versions.json')
 const getProjectPath = (projectName) => path.resolve(__dirname, `../../apps/${projectName}`)
 
-const getWorkSpaceJson = () => {
-  const json = fs.readFileSync(getWorkSpacePath());
+const getVersionsJson = () => {
+  const json = fs.readFileSync(getVersionsPath());
   return JSON.parse(json);
 }
 
 const deleteOtherProjectFolders = (projectName) => {
-  const workSpaceJson = {...getWorkSpaceJson()};
-  Object.keys(workSpaceJson.projects).forEach((key) => {
+  const projects = {...getVersionsJson()};
+  Object.keys(projects).forEach((key) => {
     if (key !== projectName) {
       const projectPath = getProjectPath(key);
       fs.rmSync(projectPath, { recursive: true, force: true });

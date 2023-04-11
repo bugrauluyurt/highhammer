@@ -22,8 +22,9 @@
         ],
         "styles": [],
         "scripts": [],
-        "webpackConfig": "@nrwl/react/plugins/webpack",
-        "postcssConfig": "apps/client-app/postcss.config.js"
+        "webpackConfig": "apps/client-app/webpack.config.js",
+        "postcssConfig": "apps/client-app/postcss.config.js",
+        "isolatedConfig": true
       },
       "configurations": {
         "development": {
