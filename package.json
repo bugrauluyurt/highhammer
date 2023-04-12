@@ -36,8 +36,8 @@
     "nx:migrate:run": "pnpm check:dependencies --only=node && pnpm install --no-frozen-lockfile && pnpm nx migrate --run-migrations"
   },
   "devDependencies": {
-    "@nestjs/schematics": "^9.0.0",
-    "@nestjs/testing": "^9.0.0",
+    "@nestjs/schematics": "9.1.0",
+    "@nestjs/testing": "9.4.0",
     "@nrwl/cypress": "16.0.0-beta.0",
     "@nrwl/eslint-plugin-nx": "16.0.0-beta.0",
     "@nrwl/jest": "16.0.0-beta.0",
