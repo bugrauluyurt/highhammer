@@ -14,10 +14,10 @@ describe('AppController', () => {
   });
 
   describe('getData', () => {
-    it('should return "Welcome to api-core of Highhammer!"', () => {
+    it('should return "Welcome to api-customer-service of Highhammer!"', () => {
       const appController = app.get<AppController>(AppController);
       expect(appController.getData()).toEqual({
-        message: 'Welcome to api-core of Highhammer!',
+        message: 'Welcome to api-customer-service of Highhammer!',
       });
     });
   });

@@ -27,7 +27,7 @@
       "inputs": ["default", "{workspaceRoot}/.eslintrc.json"]
     }
   },
-  "defaultProject": "api-core",
+  "defaultProject": "api-customer-service",
   "generators": {
     "@nrwl/react": {
       "application": {

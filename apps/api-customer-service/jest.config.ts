@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'api-core',
+  displayName: 'api-customer-service',
   preset: '../../jest.preset.js',
   globals: {},
   testEnvironment: 'node',
@@ -13,5 +13,5 @@ export default {
     ],
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/api-core',
+  coverageDirectory: '../../coverage/apps/api-customer-service',
 };

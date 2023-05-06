@@ -1,17 +1,17 @@
 {
-  "name": "api-worker",
+  "name": "api-customer-service",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "apps/api-worker/src",
+  "sourceRoot": "apps/api-customer-service/src",
   "projectType": "application",
   "targets": {
     "build": {
       "executor": "@nrwl/webpack:webpack",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "outputPath": "dist/apps/api-worker",
-        "main": "apps/api-worker/src/main.ts",
-        "tsConfig": "apps/api-worker/tsconfig.app.json",
-        "assets": ["apps/api-worker/src/assets"],
+        "outputPath": "dist/apps/api-customer-service",
+        "main": "apps/api-customer-service/src/main.ts",
+        "tsConfig": "apps/api-customer-service/tsconfig.app.json",
+        "assets": ["apps/api-customer-service/src/assets"],
         "generatePackageJson": false,
         "target": "node",
         "compiler": "tsc"
@@ -23,8 +23,8 @@
           "inspect": false,
           "fileReplacements": [
             {
-              "replace": "apps/api-worker/src/environments/environment.ts",
-              "with": "apps/api-worker/src/environments/environment.prod.ts"
+              "replace": "apps/api-customer-service/src/environments/environment.ts",
+              "with": "apps/api-customer-service/src/environments/environment.prod.ts"
             }
           ]
         }
@@ -33,11 +33,11 @@
     "serve": {
       "executor": "@nrwl/node:node",
       "options": {
-        "buildTarget": "api-worker:build"
+        "buildTarget": "api-customer-service:build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "api-worker:build:production"
+          "buildTarget": "api-customer-service:build:production"
         }
       }
     },
@@ -45,15 +45,15 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["apps/api-worker/**/*.ts"],
-        "ignorePath": "apps/api-worker/.eslintignore"
+        "lintFilePatterns": ["apps/api-customer-service/**/*.ts"],
+        "ignorePath": "apps/api-customer-service/.eslintignore"
       }
     },
     "test": {
       "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/apps/api-worker"],
+      "outputs": ["{workspaceRoot}/coverage/apps/api-customer-service"],
       "options": {
-        "jestConfig": "apps/api-worker/jest.config.ts",
+        "jestConfig": "apps/api-customer-service/jest.config.ts",
         "passWithNoTests": true
       }
     }

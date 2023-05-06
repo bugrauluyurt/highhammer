@@ -8,12 +8,12 @@ RUN npm install -g pnpm
 
 WORKDIR '/usr/src/root'
 COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./.npmrc ./versions.json ./
-COPY ./apps/api-core/package.json ./apps/api-core/
+COPY ./apps/api-customer-service/package.json ./apps/api-customer-service/
 
 RUN pnpm config set store-dir ./.pnpm-store
 RUN --mount=type=cache,id=pnpm-store,target=./.pnpm-store
 RUN pnpm install --no-frozen-lockfile
 
 COPY . .
-RUN node ./tools/dev-scripts/cmd-pre-pnpm-install.js api-core
-CMD ["pnpm", "docker:api-core"]
+RUN node ./tools/dev-scripts/cmd-pre-pnpm-install.js api-customer-service
+CMD ["pnpm", "docker:api-customer-service"]

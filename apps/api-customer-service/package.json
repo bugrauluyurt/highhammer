@@ -1,5 +1,5 @@
 {
-  "name": "api-core",
+  "name": "api-customer-service",
   "version": "0.0.0",
   "license": "MIT",
   "private": true,
@@ -12,7 +12,7 @@
       "core-js": "^3.6.5",
       "reflect-metadata": "^0.1.13",
       "regenerator-runtime": "0.13.7",
-      "rxjs": "^7.0.0",
+      "rxjs": "^7.1.0",
       "tslib": "^2.3.0"
   }
 }

@@ -14,8 +14,8 @@ describe('AppService', () => {
   });
 
   describe('getData', () => {
-    it('should return "Welcome to api-worker!"', () => {
-      expect(service.getData()).toEqual({ message: 'Welcome to api-worker!' });
+    it('should return "Welcome to api-customer-service of Highhammer!"', () => {
+      expect(service.getData()).toEqual({ message: 'Welcome to api-customer-service of Highhammer!' });
     });
   });
 });

@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       apps:
-        description: 'Apps: (Write a list of apps to build. Ex: ["client-app", "api-core"]). Empty array creates images for all services.'
+        description: 'Apps: (Write a list of apps to build. Ex: ["client-app", "api-customer-service"]). Empty array creates images for all services.'
         default: '[]'
         required: true
 
