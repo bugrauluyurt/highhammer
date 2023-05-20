@@ -1,6 +1,7 @@
 # Highhammer
 
 Full-stack monorepo starter project with Nx, NestJs, React and Docker.
+
 <p>
   <img src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png" alt="NX Logo" height="50">
   <img src="https://nestjs.com/img/logo-small.svg" height="50" alt="Nest Logo" />
@@ -11,10 +12,10 @@ Full-stack monorepo starter project with Nx, NestJs, React and Docker.
 
 Below are the Nx plugins that this project uses:
 
-- Web (no framework frontends): `@nrwl/web`
-- [React](https://reactjs.org): `@nrwl/react`
-- [Nest](https://nestjs.com): `@nrwl/nest`
-- [Node](https://nodejs.org): `@nrwl/node`
+- Web (no framework frontends): `@nx/web`
+- [React](https://reactjs.org): `@nx/react`
+- [Nest](https://nestjs.com): `@nx/nest`
+- [Node](https://nodejs.org): `@nx/node`
 
 ## Features
 
@@ -37,7 +38,7 @@ Below are the Nx plugins that this project uses:
 This section explains how to setup the application for development.
 
 - **Install Nvm**: Install `nvm` to easily switch between node versions on your computer. You can find the documentation on how to install `nvm` on your machine: `https://github.com/nvm-sh/nvm#installing-and-updating`.
-   Inside the root of the project directory run `nvm use`. This command is going to set the node version of your machine to the node version required for this project. If this does not work, find the node version written inside the ./.nvmrc file and run `nvm install ${REPLACE_WITH_NVMRC_NODE_VERSION}`. Then run `nvm use` again.
+  Inside the root of the project directory run `nvm use`. This command is going to set the node version of your machine to the node version required for this project. If this does not work, find the node version written inside the ./.nvmrc file and run `nvm install ${REPLACE_WITH_NVMRC_NODE_VERSION}`. Then run `nvm use` again.
 
 - **Install Docker**: Details on how to install docker to your system can be found inside the official documentation: `https://docs.docker.com/engine/install/`
 
@@ -95,7 +96,7 @@ Here are some core development needs and the description of the default npm scri
 
 ## Generating a library
 
-Run `nx g @nrwl/react:lib my-lib` to generate a library.
+Run `nx g @nx/react:lib my-lib` to generate a library.
 
 > You can also use any of the plugins above to generate libraries as well.
 
@@ -103,7 +104,7 @@ Libraries are shareable across libraries and applications. They can be imported 
 
 ## Code scaffolding
 
-Run `nx g @nrwl/react:component my-component --project=client-app` to generate a new component.
+Run `nx g @nx/react:component my-component --project=client-app` to generate a new component.
 
 ## Understand your workspace
 
