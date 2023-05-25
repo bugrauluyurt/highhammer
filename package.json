@@ -83,6 +83,7 @@
     "postcss": "8.4.21",
     "postcss-import": "15.0.0",
     "prettier": "^2.6.2",
+    "prettier-plugin-prisma": "^4.13.0",
     "prisma": "^4.14.1",
     "react-refresh": "^0.14.0",
     "semantic-release": "^19.0.5",

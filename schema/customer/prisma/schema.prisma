@@ -1,0 +1,63 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("POSTGRES_URL_WITH_SCHEMA")
+}
+
+model Account {
+  id                   Int           @id @default(autoincrement())
+  organizationId       Int
+  organization         Organization  @relation(fields: [organizationId], references: [id])
+  role                 Role          @default(READER)
+  email                String        @db.VarChar
+  firstName            String        @db.VarChar
+  lastName             String        @db.VarChar
+  isOrganizationOwner  Boolean       @default(false)
+  @@unique([email])
+  @@index([id, email])
+}
+
+model Organization {
+  id        Int       @id @default(autoincrement())
+  accounts  Account[]
+  projects  Project[]
+  name      String    @db.VarChar
+  @@unique([name])
+  @@index([id])
+}
+
+model Project {
+  id                       Int           @id @default(autoincrement())
+  organizationId           Int
+  organization             Organization  @relation(fields: [organizationId], references: [id])
+  name                     String        @db.VarChar
+  key                      String        @db.VarChar(60)
+  tags                     String[]      @default([])
+  clientSideAvailability   Json          @db.Json
+  environments             Environment[]
+  @@unique([key, organizationId])
+  @@index([id, organizationId])
+}
+
+model Environment {
+  id               Int          @id @default(autoincrement())
+  key              String       @db.VarChar(60)
+  projectId        Int
+  project          Project      @relation(fields: [projectId], references: [id])
+  name             String       @db.VarChar
+  color            String?
+  confirmChanges   Boolean      @default(true)
+  requireComments  Boolean      @default(false)
+  tags             String[]     @default([])
+  @@unique([key, projectId])
+  @@index([id, projectId])
+}
+
+enum Role {
+  ADMIN
+  READER
+  WRITER
+}
