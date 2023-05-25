@@ -9,6 +9,8 @@ datasource db {
 
 model Account {
   id                   Int           @id @default(autoincrement())
+  createdAt            DateTime      @default(now())
+  updatedAt            DateTime      @updatedAt
   organizationId       Int
   organization         Organization  @relation(fields: [organizationId], references: [id])
   role                 Role          @default(READER)
@@ -22,6 +24,7 @@ model Account {
 
 model Organization {
   id        Int       @id @default(autoincrement())
+  createdAt DateTime  @default(now())
   accounts  Account[]
   projects  Project[]
   name      String    @db.VarChar
@@ -31,6 +34,7 @@ model Organization {
 
 model Project {
   id                       Int           @id @default(autoincrement())
+  createdAt                DateTime      @default(now())
   organizationId           Int
   organization             Organization  @relation(fields: [organizationId], references: [id])
   name                     String        @db.VarChar
@@ -44,6 +48,7 @@ model Project {
 
 model Environment {
   id               Int          @id @default(autoincrement())
+  createdAt        DateTime     @default(now())
   key              String       @db.VarChar(60)
   projectId        Int
   project          Project      @relation(fields: [projectId], references: [id])
